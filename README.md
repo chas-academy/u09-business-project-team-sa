@@ -6,10 +6,12 @@ npm init -y
 npm install express cors dotenv mongoose
 npm install --save-dev nodemon
 npm i --save-dev @types/node
+npm install --save-dev @types/express
 npm install --save-dev @types/express @types/cors
 npm install --save-dev ts-node typescript @types/node nodemon
 npm install --save-dev typescript
 npm install mongoose
+npm install axios dotenv
 npx tsc --init //for the tsconfig.sjon
 added this under scripts 
     "start": "node app.ts",
@@ -23,3 +25,4 @@ PORT=5000
 MONGO_URI_LOCAL=mongodb://localhost:27017/ChefMate
 NODE_ENV=dev
 SESSION_SECRET=your secretkey
+SPOONACULAR_API_KEY=log in and get your own api key
