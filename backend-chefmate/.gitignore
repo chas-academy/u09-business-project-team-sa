@@ -1,14 +1,26 @@
 # Node
 node_modules/
-.env
 dist/
 build/
 .cache/
 npm-debug.log
 
-# OS
-.DS_Store
+# Environment Variables
+.env
 
-# IDEs
+# Logs
+logs/
+*.log
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Editor settings
 .vscode/
 .idea/
+
+# TypeScript
+*.tsbuildinfo
