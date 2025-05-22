@@ -1,0 +1,55 @@
+.welcome-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1rem solid #005042;
+  background: #BAAA97;
+  box-sizing: border-box;
+}
+
+.welcome-container {
+  background-color: #005042;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 28rem;
+  text-align: center;
+}
+
+.button {
+  background-color: #417DCA;
+  color: black;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  /* margin-top: 1rem; */
+  border-radius: 0.75rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #dc2626;
+}
+
+.welcome-list {
+  text-align: center;
+}
+
+.signup-switch-button {
+  margin-top: 1.5rem;
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.signup-switch-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}

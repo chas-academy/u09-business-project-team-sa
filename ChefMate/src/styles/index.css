@@ -1,4 +1,4 @@
-:root {
+/* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -65,4 +65,13 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+} */
+
+/* my styling additions */
+
+body {
+  font-family: 'Salsa', cursive;
+  background-color: #BAAA97;
+  border: 1rem solid #005042;
 }
+
