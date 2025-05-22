@@ -30,3 +30,5 @@ SPOONACULAR_API_KEY=log in and get your own api key
 frontend installs
 
 npm install axios
+npm install react-router-dom
+npm install --save-dev @types/react-router-dom
