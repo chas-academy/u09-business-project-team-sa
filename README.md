@@ -26,3 +26,7 @@ MONGO_URI_LOCAL=mongodb://localhost:27017/ChefMate
 NODE_ENV=dev
 SESSION_SECRET=your secretkey
 SPOONACULAR_API_KEY=log in and get your own api key
+
+frontend installs
+
+npm install axios
