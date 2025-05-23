@@ -1,3 +1,7 @@
+body { 
+  margin: 0;
+}
+
 .welcome-page {
   min-height: 100vh;
   width: 100%;
@@ -7,16 +11,22 @@
   border: 1rem solid #005042;
   background: #BAAA97;
   box-sizing: border-box;
+  /* padding-left: 20px; */
 }
 
 .welcome-container {
-  background-color: #005042;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* background-color: #005042; */
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
   border-radius: 1rem;
-  padding: 2rem;
+  padding: 1rem;
   width: 100%;
-  max-width: 28rem;
+  /* max-width: 600px; */
   text-align: center;
+  margin: 1rem;
+}
+
+.welcome-title {
+  margin: 0;
 }
 
 .button {
@@ -37,6 +47,8 @@
 
 .welcome-list {
   text-align: center;
+  list-style-position: inside;
+  padding-left: 0;   
 }
 
 .signup-switch-button {
@@ -52,4 +64,14 @@
 
 .signup-switch-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.welcome-banner {
+  width: 100%;              /* Make it span full width of the container */
+  height: 150px;            /* Adjust height as needed */
+  object-fit: cover;        /* Crop the image to fit the banner style */
+  opacity: 0.8;             /* Make it slightly transparent */
+  border-radius: 0.5rem;    /* Optional: rounded corners */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }

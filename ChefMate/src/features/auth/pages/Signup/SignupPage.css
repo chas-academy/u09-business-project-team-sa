@@ -17,6 +17,7 @@
   width: 100%;
   max-width: 28rem;
   text-align: center;
+  margin: 1rem;
 }
 
 .signup-title {
@@ -54,7 +55,7 @@
 }
 
 .signup-switch-button {
-  margin-top: 1.5rem;
+  /* margin-top: 1.5rem; */
   background-color: transparent;
   color: white;
   border: 1px solid white;
