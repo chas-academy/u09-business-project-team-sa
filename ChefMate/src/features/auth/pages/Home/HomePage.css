@@ -1,0 +1,14 @@
+.homepage {
+  padding: 2rem;
+  text-align: center;
+}
+
+.homepage h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.homepage p {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
