@@ -13,6 +13,9 @@ npm install --save-dev typescript
 npm install mongoose
 npm install axios dotenv
 npx tsc --init //for the tsconfig.sjon
+npm install bcrypt
+npm i --save-dev @types/bcrypt
+
 added this under scripts 
     "start": "node app.ts",
     "dev": "nodemon app.ts",
