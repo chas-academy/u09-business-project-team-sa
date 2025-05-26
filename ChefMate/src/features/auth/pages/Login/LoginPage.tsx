@@ -2,21 +2,33 @@ import './LoginPage.css';
 import LoginForm from '../../components/LoginForm';
 import { useNavigate } from 'react-router-dom';
 import ChefMateLogo from '../../../../assets/Chefmate_LOGO.png'
+import React, { useState } from 'react';
+import api from '../../../../api/axios';
+import { useAuth } from '../../../../context/AuthContext';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleGoogleLogin = () => {
     window.location.href = 'http://localhost:4000/auth/google';
   };
 
-   const handleLogin = () => {
-    // window.location.href = 'http://localhost:4000/auth/google';
+   const handleLogin = async (email: string, password: string) => {
+    try {
+      const res = await api.post('/users/login', { email, password });
+      login(res.data.user); // Save user in context
+      navigate('/home'); // Or wherever you want to redirect
+    } catch (err) {
+      console.error('Login failed', err);
+      alert('Invalid credentials');
+    }
   };
 
   const goToSignup = () => {
     navigate('/signup');
   };
+
   return (
     <div className="login-page">
       <div className="login-container">
@@ -25,15 +37,15 @@ const LoginPage = () => {
             To start creating MealPlans please create an account or login
             </h1>
 
-        <LoginForm /> 
+        <LoginForm onLogin={handleLogin} /> 
 
         {/* <p className="login-subtitle">
             Or sign in with google
         </p> */}
 
-        <button onClick={handleLogin} className="login-button">
+        {/* <button onClick={handleLogin} className="login-button">
           Log in
-        </button>
+        </button> */}
 
         <button onClick={handleGoogleLogin} className="login-Google-button">
           Or Sign in with Google

@@ -68,3 +68,20 @@
 .signup-switch-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
+
+.signup-button {
+  background-color: #417DCA;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.signup-button:hover {
+  background-color: #dc2626;
+}

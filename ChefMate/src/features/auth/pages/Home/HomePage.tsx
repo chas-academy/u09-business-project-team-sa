@@ -2,6 +2,7 @@ import './HomePage.css'
 import SearchRecipeForm from '../../components/SearchRecipeForm';'../../components/SearchRecipeForm';
 import RecipeCard from '../../../recipes/components/RecipeCard';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../../context/AuthContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import ChefMateLogo from '../../../../assets/Chefmate_LOGO.png'
 
@@ -16,8 +17,18 @@ const handleSaveMeal = (mealId: string) => {
 };
 
 const HomePage = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();         // Clear the user
+    navigate('/login'); // Redirect to login
+  };
+
   return (
     <div className="homepage">
+
+      <button onClick={handleLogout} className="logout-button">Log Out</button>
 
       <img src={ChefMateLogo} alt="ChefMate Logo" />
 

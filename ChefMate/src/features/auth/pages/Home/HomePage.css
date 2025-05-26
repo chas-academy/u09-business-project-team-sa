@@ -12,3 +12,20 @@
   font-size: 1.2rem;
   margin: 0.5rem 0;
 }
+
+.logout-button {
+  background-color: #417DCA;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #dc2626;
+}

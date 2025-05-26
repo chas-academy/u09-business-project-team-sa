@@ -9,6 +9,7 @@ import LoginPage from '../features/auth/pages/Login/LoginPage'
 import SignupPage from '../features/auth/pages/Signup/SignupPage'
 import HomePage from '../features/auth/pages/Home/HomePage'
 import WelcomePage from '../features/auth/pages/Welcome/WelcomePage'
+import ProtectedRoute from '../features/auth/components/ProtectedRoute'
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
         <Route path="/" element={<WelcomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/home" 
+            element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
 
         {/* Redirect any unknown route to WelcomePage */}
         <Route path="*" element={<Navigate to="/" />} />
