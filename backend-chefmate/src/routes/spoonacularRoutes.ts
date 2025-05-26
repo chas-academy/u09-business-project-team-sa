@@ -1,11 +1,14 @@
 import express, { Request, Response } from 'express';
 import { searchRecipes } from '../services/spoonacular';
 
-const app = express();
+const router = express.Router();
 
-app.get('/api/recipes', async (req: Request, res: Response) => {
+router.get('/api/recipes', async (req: Request, res: Response): Promise<void> => {
   const query = req.query.q as string;
-  if (!query) return res.status(400).json({ error: 'Missing query param ?q=' });
+  if (!query) {
+    res.status(400).json({ error: 'Missing query param ?q=' });
+    return;
+  }
 
   try {
     const data = await searchRecipes(query);
@@ -14,3 +17,5 @@ app.get('/api/recipes', async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error fetching from Spoonacular API' });
   }
 });
+
+export default router;

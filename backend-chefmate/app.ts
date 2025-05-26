@@ -1,7 +1,9 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Request, Response, Express } from 'express';
 import cors, { CorsOptionsDelegate } from 'cors';
 import { connectDB } from './src/database/db';
 import dotenv from 'dotenv';
+import userRoutes from './src/routes/userRoutes';
+import spoonacularRoutes from './src/routes/spoonacularRoutes';
 
 connectDB();
 dotenv.config();
@@ -13,7 +15,8 @@ const app: Express = express();
 
 const corsOptions: CorsOptionsDelegate = (req, callback) => {
   const allowedOrigins: string[] = [
-    // add frontend URL(s) here, e.g., 'http://localhost:5173'
+    'http://localhost:5173',
+    'https://chef-mate.netlify.app'
   ];
 
   const origin = req.headers.origin || '';
@@ -25,34 +28,18 @@ const corsOptions: CorsOptionsDelegate = (req, callback) => {
 };
 
 app.use(cors(corsOptions));
-// app.use(cors({
-//     origin: (origin, callback) => {
-//         const allowedOrigins = [
-//           // add frontent URLS here
-//         ];
-//        if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     } 
-//     },
-//     credentials: false, // disable whilst no login function
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
-//     allowedHeaders: ['Content-Type'],
-// }));
-
-//body parsers
-app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+// add more routes here - users / menu etc
+app.use('/api/users', userRoutes);
+app.use('/api/spoonacular', spoonacularRoutes);
 
 // endpoint / routes
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.send('API for ChefMate is up and running!');
 });
  
-// add more routes here - users / menu etc
-
-
 // start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
