@@ -16,13 +16,21 @@ npm install axios dotenv
 npx tsc --init //for the tsconfig.sjon
 npm install bcrypt
 npm i --save-dev @types/bcrypt
+-----
+For Google oAuth: 
+npm install @react-oauth/google
+npm install jwt-decode
+npm install google-auth-library
+npm install react-router-dom
+-----
 
-added this under scripts 
+
+added this under scripts
     "start": "node app.ts",
     "dev": "nodemon app.ts",
 made app.ts file
 
-make your .env file with this -
+make your .env file with this - Backend
 
 MONGO_URI_PROD=mongodb+srv://username:password@YOURcluster.kcotv.mongodb.net/ChefMate?retryWrites=true&w=majority&appName=YourCluster
 PORT=5000
@@ -30,8 +38,13 @@ MONGO_URI_LOCAL=mongodb://localhost:27017/ChefMate
 NODE_ENV=dev
 SESSION_SECRET=your secretkey
 SPOONACULAR_API_KEY=log in and get your own api key
+GOOGLE_CLIENT_ID=805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleusercontent.com
 
 frontend installs
+
+create a .env file in frontend as well with this
+VITE_GOOGLE_CLIENT_ID=805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleusercontent.com
+
 
 npm install axios
 npm install react-router-dom
