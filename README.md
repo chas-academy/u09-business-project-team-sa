@@ -8,6 +8,7 @@ npm install --save-dev nodemon
 npm i --save-dev @types/node
 npm install --save-dev @types/express
 npm install --save-dev @types/express @types/cors
+npm install --save-dev @types/react @types/react-dom
 npm install --save-dev ts-node typescript @types/node nodemon
 npm install --save-dev typescript
 npm install mongoose
