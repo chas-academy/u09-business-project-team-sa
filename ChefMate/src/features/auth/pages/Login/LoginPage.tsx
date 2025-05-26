@@ -1,32 +1,53 @@
-import './LoginPage.css';
-import LoginForm from '../../components/LoginForm';
-import { useNavigate } from 'react-router-dom';
-import ChefMateLogo from '../../../../assets/Chefmate_LOGO.png'
-import React, { useState } from 'react';
-import api from '../../../../api/axios';
-import { useAuth } from '../../../../context/AuthContext';
+import "./LoginPage.css";
+import LoginForm from "../../components/LoginForm";
+import { useNavigate } from "react-router-dom";
+import ChefMateLogo from "../../../../assets/Chefmate_LOGO.png";
+import React from "react";
+import api from "../../../../api/axios";
+import { useAuth } from "../../../../context/AuthContext";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:4000/auth/google';
-  };
-
-   const handleLogin = async (email: string, password: string) => {
+  const handleLogin = async (email: string, password: string) => {
     try {
-      const res = await api.post('/users/login', { email, password });
+      const res = await api.post("/users/login", { email, password });
       login(res.data.user); // Save user in context
-      navigate('/home'); // Or wherever you want to redirect
+      navigate("/home");
     } catch (err) {
-      console.error('Login failed', err);
-      alert('Invalid credentials');
+      console.error("Login failed", err);
+      alert("Invalid credentials");
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse: {
+    credential?: string;
+  }) => {
+    if (credentialResponse.credential) {
+      try {
+        // Send Google token to backend for verification and login/signup
+        const res = await api.post("/auth/google-login", {
+          token: credentialResponse.credential,
+        });
+        login(res.data.user); // Save user info in context (adjust to your backend response)
+        navigate("/home");
+      } catch (error) {
+        console.error("Google login failed", error);
+        alert("Google login failed");
+      }
+    }
+  };
+
+  const handleGoogleError = () => {
+    alert("Google login failed");
+  };
+
   const goToSignup = () => {
-    navigate('/signup');
+    navigate("/signup");
   };
 
   return (
@@ -34,36 +55,32 @@ const LoginPage = () => {
       <div className="login-container">
         <img src={ChefMateLogo} alt="ChefMate Logo" />
         <h1 className="login-title">
-            To start creating MealPlans please create an account or login
-            </h1>
+          To start creating MealPlans please create an account or login
+        </h1>
 
-        <LoginForm onLogin={handleLogin} /> 
+        <LoginForm onLogin={handleLogin} />
 
-        {/* <p className="login-subtitle">
-            Or sign in with google
-        </p> */}
+        <p className="login-subtitle">Or sign in with Google</p>
 
-        {/* <button onClick={handleLogin} className="login-button">
-          Log in
-        </button> */}
-
-        <button onClick={handleGoogleLogin} className="login-Google-button">
-          Or Sign in with Google
-        </button>
+        <GoogleOAuthProvider clientId={clientId}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+            useOneTap
+          />
+        </GoogleOAuthProvider>
 
         <p className="login-subtitle">
-            New to ChefMate? <br></br>
-            Sign up here to start planning your meals for the week!
+          New to ChefMate? <br />
+          Sign up here to start planning your meals for the week!
         </p>
 
         <button onClick={goToSignup} className="signup-switch-button">
           Create an Account
         </button>
-
       </div>
     </div>
   );
 };
 
 export default LoginPage;
-
