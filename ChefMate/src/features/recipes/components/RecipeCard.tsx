@@ -1,24 +1,8 @@
-// import './RecipeCard.css';
-
-// type RecipeCardProps = {
-//   title: string;
-//   description?: string;
-//   image?: string;
-// };
-
-// const RecipeCard = ({ title, description, image }: RecipeCardProps) => {
-//   return (
-//     <div className="recipe-card">
-//       {image && <img src={image} alt={title} className="recipe-image" />}
-//       <h2>{title}</h2>
-//       {description && <p>{description}</p>}
-//     </div>
-//   );
-// };
-
-// export default RecipeCard;
-
 import './RecipeCard.css';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import api from '../../../api/axios';
 
 type Meal = {
   id: string;
@@ -32,6 +16,8 @@ type RecipeCardProps = {
 };
 
 const RecipeCard = ({ title, meals, onSave }: RecipeCardProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className="recipe-card">
       <h2>{title}</h2>
@@ -41,6 +27,7 @@ const RecipeCard = ({ title, meals, onSave }: RecipeCardProps) => {
           <div key={meal.id} className="meal-card">
             <h3>{meal.name}</h3>
             <button onClick={() => onSave(meal.id)}>Save</button>
+            <button onClick={() => navigate(`spoonacular/meals/${meal.id}`)}>View</button>
           </div>
         ))}
       </div>

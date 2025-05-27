@@ -20,3 +20,17 @@ export const searchRecipes = async (query: string) => {
     throw new Error('Failed to fetch recipes');
   }
 };
+
+export const getRecipeById = async (id: string) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/recipes/${id}/information`, {
+      params: {
+        apiKey: API_KEY,
+        includeNutrition: false,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    throw new Error('Failed to fetch recipe details');
+  }
+};
