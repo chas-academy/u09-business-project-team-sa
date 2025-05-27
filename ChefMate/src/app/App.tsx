@@ -10,11 +10,13 @@ import SignupPage from '../features/auth/pages/Signup/SignupPage'
 import HomePage from '../features/auth/pages/Home/HomePage'
 import WelcomePage from '../features/auth/pages/Welcome/WelcomePage'
 import ProtectedRoute from '../features/auth/components/ProtectedRoute'
+import MealCard from '../features/recipes/components/MealCard'
 
 function App() {
   return (
     <Router>
       <Routes>
+        {/* auth routes */}
         <Route path="/" element={<WelcomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
@@ -23,6 +25,9 @@ function App() {
 
         {/* Redirect any unknown route to WelcomePage */}
         <Route path="*" element={<Navigate to="/" />} />
+
+        {/* api routes */}
+        <Route path="/meals/:id" element={<MealCard />} />
         
       </Routes>
     </Router>
