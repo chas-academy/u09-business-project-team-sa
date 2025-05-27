@@ -1,7 +1,17 @@
 import express, { Request, Response } from 'express';
-import { getRecipeById, searchRecipes } from '../services/spoonacular';
+import { getRecipeById, searchRecipes, getRandomRecipes } from '../services/spoonacular';
 
 const router = express.Router();
+
+router.get('/recipes/random', async (_req: Request, res: Response) => {
+  try {
+    const data = await getRandomRecipes();
+    res.json(data);
+  } catch (err) {
+    console.error('Error fetching popular recipes:', err);
+    res.status(500).json({ error: 'Error fetching popular recipes' });
+  }
+});
 
 // GET /api/recipes?q=chicken
 router.get('/recipes', async (req: Request, res: Response): Promise<void> => {
@@ -23,7 +33,7 @@ router.get('/recipes', async (req: Request, res: Response): Promise<void> => {
 // GET /api/recipes/:id
 router.get('/recipes/:id', async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
-
+  console.log('Fetching recipe by ID:', id);
   if (!id) {
     res.status(400).json({ error: 'Missing recipe ID' }); 
     return;
