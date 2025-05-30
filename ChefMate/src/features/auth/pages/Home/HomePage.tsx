@@ -51,7 +51,7 @@ useEffect(() => {
       if (res.data.recipes) {
       setMeals(res.data.recipes);
       } else {
-        console.warn('No random recipes foud in response', res.data);
+        console.warn('No random recipes fonud in response', res.data);
         setMeals([]);
       }
     } catch (err) {

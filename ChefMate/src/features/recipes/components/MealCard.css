@@ -1,0 +1,53 @@
+.meal-card-detailed {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.meal-card-detailed h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.meal-card-detailed p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.meal-card-detailed ul {
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.meal-card-detailed h4 {
+  margin-top: 1.5rem;
+  font-size: 1.25rem;
+  color: #555;
+}
+
+.meal-image {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+
+.diet-info p {
+  margin: 0.2rem 0;
+  font-weight: bold;
+}
+
+/* .meal-content {
+  text-align: center;
+} */
+
+.meal-card-detailed ul,
+.meal-card-detailed ol,
+.meal-card-detailed h4 {
+  text-align: left;
+}

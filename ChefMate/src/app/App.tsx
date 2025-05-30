@@ -27,7 +27,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" />} />
 
         {/* api routes */}
-        <Route path="/meals/:id" element={<MealCard />} />
+        <Route path="spoonacular/recipes/:id" element={<MealCard />} />
         
       </Routes>
     </Router>
