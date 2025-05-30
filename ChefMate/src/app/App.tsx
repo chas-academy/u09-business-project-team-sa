@@ -10,7 +10,8 @@ import SignupPage from '../features/auth/pages/Signup/SignupPage'
 import HomePage from '../features/auth/pages/Home/HomePage'
 import WelcomePage from '../features/auth/pages/Welcome/WelcomePage'
 import ProtectedRoute from '../features/auth/components/ProtectedRoute'
-import MealCard from '../features/recipes/components/MealCard'
+import MealCard from '../features/auth/components/cards/MealCard'
+import ProfilePage from '../features/auth/pages/Profile/ProfilePage'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/home" 
             element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProfilePage />} />
 
         {/* Redirect any unknown route to WelcomePage */}
         <Route path="*" element={<Navigate to="/" />} />

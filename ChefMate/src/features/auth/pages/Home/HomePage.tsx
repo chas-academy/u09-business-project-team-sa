@@ -1,12 +1,13 @@
 import './HomePage.css'
-import SearchRecipeForm from '../../components/SearchRecipeForm';'../../components/SearchRecipeForm';
-import RecipeCard from '../../../recipes/components/RecipeCard';
+import SearchRecipeForm from '../../components/forms/SearchRecipeForm';'../../components/SearchRecipeForm';
+import RecipeCard from '../../components/cards/RecipeCard';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../context/AuthContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import ChefMateLogo from '../../../../assets/Chefmate_LOGO.png'
 import { useEffect, useState } from 'react';
 import api from '../../../../api/axios';
+import '../../components/Buttons.css';
 
 type Meal = {
   id: string;
@@ -14,6 +15,7 @@ type Meal = {
 };
 
 const HomePage = () => {
+  const { user } = useAuth();
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -26,6 +28,10 @@ const HomePage = () => {
     logout();         // Clear the user
     navigate('/login'); // Redirect to login
   };
+
+  const handleViewProfile = () => {
+    navigate('/profile');
+  }
 
   const handleSaveMeal = (mealId: string) => {
   console.log(`Meal ${mealId} saved!`);
@@ -43,6 +49,19 @@ const HomePage = () => {
       setLoading(false);
     }
   };
+
+  const handleClear = async () => {
+  setSearchTerm('');
+  setLoading(true);
+  try {
+    const res = await api.get('/meals/popular');
+    setMeals(res.data);
+  } catch (err) {
+    console.error('Failed to fetch popular meals', err);
+  } finally {
+    setLoading(false);
+  }
+};
 
 useEffect(() => {
   const fetchRandomMeals = async () => {
@@ -68,15 +87,17 @@ useEffect(() => {
   return (
     <div className="homepage">
 
-      <button onClick={handleLogout} className="logout-button">Log Out</button>
-
       <img src={ChefMateLogo} alt="ChefMate Logo" />
 
-      <h1>Start searching for recipes</h1>
+      <h2>Welcome, {user?.username ?? 'Guest'} 👋</h2>
+      <button onClick={handleLogout} className="logout-button">Log Out</button>
+      <button onClick={handleViewProfile} className="profile-button">Profile</button>
+    
+      <h2>Start searching for recipes</h2>
     
     {/* search form for recipes */}
     <div>
-      <SearchRecipeForm onSearch={handleSearch} />
+      <SearchRecipeForm onSearch={handleSearch} onClear={handleClear}/>
     </div>
 
     {loading ? (
@@ -96,18 +117,3 @@ useEffect(() => {
 };
 
 export default HomePage;
-
-  // useEffect(() => {
-  //   const fetchMeals = async () => {
-  //     try {
-  //       const res = await api.get('spoonacular/recipes?q=chicken'); // 
-  //       setMeals(res.data.results); //
-  //     } catch (err) {
-  //       console.error('Failed to fetch meals', err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchMeals();
-  // }, []);

@@ -2,7 +2,7 @@ import './RecipeCard.css';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import api from '../../../api/axios';
+import api from '../../../../api/axios';
 import { Link } from 'react-router-dom';
 
 type Meal = {

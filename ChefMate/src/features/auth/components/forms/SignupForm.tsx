@@ -1,4 +1,4 @@
-import '../pages/Signup/SignupPage.css'
+import '../../pages/Signup/SignupPage.css'
 import React, { useState } from 'react';
 // import api from '../../../api/axios';
 // import { useNavigate } from 'react-router-dom';

@@ -113,7 +113,7 @@ body {
   border: 1px solid #ccc;
   font-size: 1rem;
   outline: none;
-  color: #D9D9D9;
+  color: darkgray;
 }
 
 .login-form input:focus {

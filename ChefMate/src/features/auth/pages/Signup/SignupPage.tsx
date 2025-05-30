@@ -1,5 +1,5 @@
 import './SignupPage.css';
-import SignupForm from '../../components/SignupForm';
+import SignupForm from '../../components/forms/SignupForm';
 import { useNavigate } from 'react-router-dom';
 import ChefMateLogo from '../../../../assets/Chefmate_LOGO.png'
 import React, { useState } from 'react';

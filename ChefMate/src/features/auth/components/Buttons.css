@@ -1,0 +1,152 @@
+.login-Google-button {
+  background-color: #417DCA;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.login-Google-button:hover {
+  background-color: #dc2626;
+}
+
+.login-button {
+  background-color: #417DCA;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: #dc2626;
+}
+
+.button {
+  background-color: #417DCA;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  /* margin-top: 1rem; */
+  border-radius: 0.75rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #dc2626;
+}
+
+
+.logout-button {
+  background-color: #417DCA;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #dc2626;
+}
+
+.profile-button {
+  background-color: #417DCA;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.profile-button:hover {
+  background-color: #dc2626;
+}
+
+.signup-switch-button {
+  background-color: #f3f4f6;
+  color: #1f2937;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-switch-button:hover {
+  background-color: #e5e7eb;
+}
+
+.home-button {
+  background-color: #417DCA;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.home-button:hover {
+  background-color: #dc2626;
+}
+
+.search-recipe-button {
+  background-color: #417DCA;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.search-recipe-button:hover {
+  background-color: #dc2626;
+}
+
+.clear-button {
+  background-color: #417DCA;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.clear-button:hover {
+  background-color: #dc2626;
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { testFetch } from '../../core/api/testFetch';
+import { testFetch } from './testFetch';
 
 const TestFetch = () => {
   const [data, setData] = useState<any>(null);

@@ -1,4 +1,4 @@
-import '../pages/Login/LoginPage.css'
+import '../../pages/Login/LoginPage.css'
 import React, { useState } from 'react';
 
 type Props = {

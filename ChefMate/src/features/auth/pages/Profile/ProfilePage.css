@@ -1,0 +1,32 @@
+.profile-page {
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.calendar {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+}
+
+.day-column {
+  min-width: 150px;
+  background: #f8f8f8;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.meal-slot {
+  margin-top: 1rem;
+}
+
+.meal-slot ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.empty {
+  color: #aaa;
+  font-style: italic;
+}
