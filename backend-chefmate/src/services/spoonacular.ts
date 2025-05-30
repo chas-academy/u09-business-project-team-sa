@@ -27,7 +27,7 @@ export const searchRecipes = async (query: string) => {
       params: {
         apiKey: API_KEY,
         query,
-        number: 10, // how many results to return
+        number: 6, // how many results to return
       },
     });
     return res.data;
@@ -41,7 +41,7 @@ export const getRecipeById = async (id: string) => {
     const res = await axios.get(`${BASE_URL}/recipes/${id}/information`, {
       params: {
         apiKey: API_KEY,
-        includeNutrition: false,
+        includeNutrition: true,
       },
     });
     return res.data;

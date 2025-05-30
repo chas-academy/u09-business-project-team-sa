@@ -40,7 +40,43 @@ router.get('/recipes/:id', async (req: Request, res: Response): Promise<void> =>
   }
 
   try {
-    const recipe = await getRecipeById(id);
+    const raw = await getRecipeById(id);
+
+    // Extract calories from nutrients
+    const calories = raw.nutrition?.nutrients?.find(
+      (n: any) => n.name.toLowerCase() === 'calories'
+    )?.amount;
+    const protein = raw.nutrition?.nutrients?.find(
+      (n: any) => n.name === 'Protein')
+      ?.amount;
+
+    const fat = raw.nutrition?.nutrients?.find(
+      (n: any) => n.name === 'Fat')
+      ?.amount;
+
+    const steps =
+      raw.analyzedInstructions?.[0]?.steps?.map((step: any) => step.step) || [];
+
+
+    const recipe = {
+      id: raw.id,
+      name: raw.title,
+      image: raw.image,
+      dishTypes: raw.dishTypes,
+      vegetarian: raw.vegetarian,
+      vegan: raw.vegan,
+      glutenFree: raw.glutenFree,
+      dairyFree: raw.dairyFree,
+      calories,
+      timeToMake: raw.readyInMinutes,
+      servings: raw.servings,
+      protein,
+      fat,
+      description: raw.summary,
+      ingredients: raw.extendedIngredients?.map((ing: any) => ing.original),
+      instructions: raw.instructions,
+    };
+
     res.json(recipe);
   } catch (err) {
     console.error(`Error fetching recipe ${id}:`, err);
