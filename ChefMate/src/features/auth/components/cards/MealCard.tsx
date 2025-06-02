@@ -1,7 +1,9 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '../../../../api/axios';
 import './MealCard.css';
+import '../../components/Buttons.css';
+import mockMeals from '../../../../mocks/mockMeals';
 
 type Meal = {
   id: string;
@@ -27,6 +29,33 @@ const MealCard = () => {
   const { id } = useParams();
   const [meal, setMeal] = useState<Meal | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const handleViewHome = () => {
+    navigate('/home');
+  }
+
+//   const onSave = async (mealId: string) => {
+//   try {
+//     const token = localStorage.getItem('token'); // or sessionStorage if you store it there
+
+//     const response = await api.post(
+//       '/user/favorites',
+//       { mealId }, // or the whole meal if you store full data
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+
+//     console.log('Meal saved!', response.data);
+//     alert('Meal saved successfully!');
+//   } catch (error) {
+//     console.error('Failed to save meal:', error);
+//     alert('Failed to save meal. You might not be logged in.');
+//   }
+// };
 
   useEffect(() => {
     const fetchMeal = async () => {
@@ -35,6 +64,8 @@ const MealCard = () => {
         setMeal(res.data);
       } catch (err) {
         console.error('Failed to fetch meal', err);
+        const fallbackMeal = mockMeals.find((meal) => meal.id === id) || mockMeals[0];
+        setMeal(fallbackMeal);
       } finally {
         setLoading(false);
       }
@@ -48,6 +79,7 @@ const MealCard = () => {
 
   return (
     <div className="meal-card-detailed">
+      <button onClick={handleViewHome} className="home-button">Home</button>
       {meal.image && (
         <img src={meal.image} alt={meal.name} className="meal-image" />
       )}
@@ -106,12 +138,7 @@ const MealCard = () => {
     </div>
 
       <h2>Enjoy!</h2>
-      {/* {meal.instructions && (
-        <>
-          <h4>Instructions:</h4>
-          <p>{meal.instructions}</p>
-        </>
-      )} */}
+      {/* <button onClick={() => onSave(meal.id)} className='save-button'>Save</button> */}
     
     </div>
   );
