@@ -16,6 +16,7 @@ router.get('/recipes/random', async (_req: Request, res: Response) => {
 // GET /api/recipes?q=chicken
 router.get('/recipes', async (req: Request, res: Response): Promise<void> => {
   const query = req.query.q as string;
+  const offset = parseInt(req.query.offset as string) || 0;
 
   if (!query) {
     res.status(400).json({ error: 'Missing query param ?q=' });
@@ -23,9 +24,10 @@ router.get('/recipes', async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-    const data = await searchRecipes(query);
+    const data = await searchRecipes(query, offset);
     res.json(data);
   } catch (err) {
+    console.error('Error fetching from Spoonacular API:', err);
     res.status(500).json({ error: 'Error fetching from Spoonacular API' });
   }
 });

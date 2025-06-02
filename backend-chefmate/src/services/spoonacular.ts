@@ -21,17 +21,19 @@ export const getRandomRecipes = async () => {
   }
 };
 
-export const searchRecipes = async (query: string) => {
+export const searchRecipes = async (query: string, offset: number = 0) => {
   try {
     const res = await axios.get(`${BASE_URL}/recipes/complexSearch`, {
       params: {
         apiKey: API_KEY,
         query,
         number: 6, // how many results to return
+        offset,
       },
     });
     return res.data;
   } catch (error) {
+    console.error('Spoonacular search recipe error:', error);
     throw new Error('Failed to fetch recipes');
   }
 };
