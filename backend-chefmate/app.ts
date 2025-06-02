@@ -15,6 +15,7 @@ const corsOptions: CorsOptionsDelegate = (req, callback) => {
   const allowedOrigins = [
     "http://localhost:5173",
     "https://chef-mate.netlify.app",
+    "https://chefmate-backend-server.onrender.com"
   ];
 
   const origin = req.headers.origin || "";
