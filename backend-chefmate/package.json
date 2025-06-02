@@ -1,11 +1,11 @@
 {
   "name": "backend-chefmate",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "dist/app.js",
   "scripts": {
-    "start": "node app.ts",
+    "start": "node dist/app.js",
     "build": "tsc",
-    "dev": "nodemon app.ts",
+    "dev": "ts-node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
