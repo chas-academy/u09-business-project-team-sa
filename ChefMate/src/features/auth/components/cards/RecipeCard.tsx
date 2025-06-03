@@ -36,13 +36,14 @@ const RecipeCard = ({ title, meals, onSave, onMore, onBack, searchTerm, offset }
             <img
               src={meal.image}
               alt={meal.name}
-              style={{
-                width: '100%',
-                height: '140px',
-                objectFit: 'cover',
-                borderRadius: '8px',
-                marginBottom: '10px'
-              }}
+              className='meal-image'
+              // style={{
+              //   width: '100%',
+              //   height: '140px',
+              //   objectFit: 'cover',
+              //   borderRadius: '8px',
+              //   marginBottom: '10px'
+              // }}
             />
           )}
 

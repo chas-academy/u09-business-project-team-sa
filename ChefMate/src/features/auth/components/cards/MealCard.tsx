@@ -4,6 +4,7 @@ import api from '../../../../api/axios';
 import './MealCard.css';
 import '../../components/Buttons.css';
 import mockMeals from '../../../../mocks/mockMeals';
+import { useMealPlan } from '../../../../context/MealPlanContext';
 
 type Meal = {
   id: string;
@@ -28,6 +29,13 @@ type Meal = {
 const MealCard = () => {
   const { id } = useParams();
   const [meal, setMeal] = useState<Meal | null>(null);
+
+  const [showPlannerSelector, setShowPlannerSelector] = useState(false);
+  const { addMealToPlan } = useMealPlan();
+
+  const [selectedDay, setSelectedDay] = useState('');
+  const [selectedMealType, setSelectedMealType] = useState('');
+
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -140,6 +148,51 @@ const MealCard = () => {
       <h2>Enjoy!</h2>
       {/* <button onClick={() => onSave(meal.id)} className='save-button'>Save</button> */}
     
+      <button onClick={() => setShowPlannerSelector(!showPlannerSelector)} className='save-button'>
+  {showPlannerSelector ? 'Cancel' : 'Save to Calendar'}
+</button>
+
+{showPlannerSelector && (
+  <div className="planner-selector">
+    <label>
+      Select Day:
+      <select value={selectedDay} onChange={(e) => setSelectedDay(e.target.value)}>
+        <option value="">-- Choose Day --</option>
+        <option value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+        <option value="Saturday">Saturday</option>
+        <option value="Sunday">Sunday</option>
+      </select>
+    </label>
+
+    <label>
+      Meal Type:
+      <select value={selectedMealType} onChange={(e) => setSelectedMealType(e.target.value)}>
+        <option value="">-- Choose Type --</option>
+        <option value="breakfast">Breakfast</option>
+        <option value="lunch">Lunch</option>
+        <option value="dinner">Dinner</option>
+        <option value="snacks">Snacks</option>
+      </select>
+    </label>
+
+    <button
+      className="save-button"
+      disabled={!selectedDay || !selectedMealType}
+      onClick={() => {
+        addMealToPlan(selectedDay, selectedMealType, meal);
+        alert('Meal added to your planner!');
+        setShowPlannerSelector(false);
+      }}
+    >
+      Confirm Save
+    </button>
+  </div>
+)}
+
     </div>
   );
 };

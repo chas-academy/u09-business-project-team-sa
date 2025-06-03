@@ -2,9 +2,12 @@
 // import reactLogo from '/src/assets/react.svg'
 // import viteLogo from '/vite.svg'
 import { useState } from 'react'
-import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
+
+import { MealPlanProvider } from '../context/MealPlanContext'
+
+import './App.css'
 import LoginPage from '../features/auth/pages/Login/LoginPage'
 import SignupPage from '../features/auth/pages/Signup/SignupPage'
 import HomePage from '../features/auth/pages/Home/HomePage'
@@ -15,6 +18,7 @@ import ProfilePage from '../features/auth/pages/Profile/ProfilePage'
 
 function App() {
   return (
+  <MealPlanProvider>
     <Router>
       <Routes>
         {/* auth routes */}
@@ -25,14 +29,15 @@ function App() {
             element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
         <Route path="/profile" element={<ProfilePage />} />
 
-        {/* Redirect any unknown route to WelcomePage */}
-        <Route path="*" element={<Navigate to="/" />} />
-
         {/* api routes */}
         <Route path="spoonacular/recipes/:id" element={<MealCard />} />
         
+        {/* Redirect any unknown route to WelcomePage */}
+        <Route path="*" element={<Navigate to="/" />} />
+        
       </Routes>
     </Router>
+  </MealPlanProvider>
   );
 }
 

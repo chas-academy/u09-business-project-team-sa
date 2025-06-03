@@ -17,13 +17,28 @@ const LoginPage = () => {
   const handleLogin = async (email: string, password: string) => {
     try {
       const res = await api.post("/users/login", { email, password });
-      login(res.data.user); // Save user in context
+      const { token, user } = res.data;
+
+      // Save token to localStorage or context
+      localStorage.setItem("token", token); // or store in AuthContext
+
+      login(user); // Save user info
       navigate("/home");
     } catch (err) {
       console.error("Login failed", err);
       alert("Invalid credentials");
     }
   };
+  // const handleLogin = async (email: string, password: string) => {
+  //   try {
+  //     const res = await api.post("/users/login", { email, password });
+  //     login(res.data.user); // Save user in context
+  //     navigate("/home");
+  //   } catch (err) {
+  //     console.error("Login failed", err);
+  //     alert("Invalid credentials");
+  //   }
+  // };
 
   const handleGoogleSuccess = async (credentialResponse: {
     credential?: string;
