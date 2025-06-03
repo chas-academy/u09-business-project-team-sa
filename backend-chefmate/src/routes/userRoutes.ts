@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import User from '../models/userModel';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -33,7 +34,7 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
      return;
   } catch (err) {
      res.status(500).json({ message: 'Signup failed', error: err });
-     return
+     return;
   }
 });
 
@@ -59,8 +60,13 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
+      expiresIn: '1h',
+    });
+
     res.status(200).json({ 
         message: 'Login successful', 
+        token,
         user: { username: user.username, email } 
     });
     return;
