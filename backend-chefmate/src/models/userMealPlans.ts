@@ -14,11 +14,7 @@ const MealPlanSchema = new mongoose.Schema({
     unique: true,
   },
   plan: {
-    type: Map,
-    of: new mongoose.Schema({
-      type: Map,
-      of: [MealSlotSchema]
-    }),
+    type: Object,
     required: true,
   },
 });

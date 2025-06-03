@@ -5,10 +5,10 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // hashed
   createdAt: { type: Date, default: Date.now },
-  mealPlan: {
-    type: Object,
-    default: {},
-  }
+  // mealPlan: {
+  //   type: Object,
+  //   default: {},
+  // }
 });
 
 export default mongoose.model('User', userSchema);
