@@ -1,82 +1,93 @@
-// import TestFetch from '../shared/components/TestFetch'
-// import reactLogo from '/src/assets/react.svg'
-// import viteLogo from '/vite.svg'
-import { useState } from 'react'
-import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Navigate } from 'react-router-dom'
-import LoginPage from '../features/auth/pages/Login/LoginPage'
-import SignupPage from '../features/auth/pages/Signup/SignupPage'
-import HomePage from '../features/auth/pages/Home/HomePage'
-import WelcomePage from '../features/auth/pages/Welcome/WelcomePage'
-import ProtectedRoute from '../features/auth/components/ProtectedRoute'
-import MealCard from '../features/auth/components/cards/MealCard'
-import ProfilePage from '../features/auth/pages/Profile/ProfilePage'
+import { useEffect, useState } from "react";
+import "./App.css";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
+import LoginPage from "../features/auth/pages/Login/LoginPage";
+import SignupPage from "../features/auth/pages/Signup/SignupPage";
+import HomePage from "../features/auth/pages/Home/HomePage";
+import WelcomePage from "../features/auth/pages/Welcome/WelcomePage";
+import ProtectedRoute from "../features/auth/components/ProtectedRoute";
+import MealCard from "../features/auth/components/cards/MealCard";
+import ProfilePage from "../features/auth/pages/Profile/ProfilePage";
 
 function App() {
+  const [user, setUser] = useState<any>(null);
+
+  const fetchUser = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/auth/user", {
+        credentials: "include",
+      });
+      const data = await res.json();
+      setUser(data);
+    } catch (err) {
+      console.error("Failed to fetch user:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  const login = () => {
+    window.open("http://localhost:5000/auth/google", "_self");
+  };
+
+  const logout = async () => {
+    await fetch("http://localhost:5000/auth/logout", {
+      credentials: "include",
+    });
+    setUser(null);
+  };
+
   return (
     <Router>
+      <div className="app-header">
+        <h1>Login</h1>
+        {user ? (
+          <div>
+            <p>Welcome, {user.displayName}</p>
+            {user.photos?.[0]?.value && (
+              <img src={user.photos[0].value} alt="profile" width="80" />
+            )}
+            <br />
+            <button onClick={logout}>Logout</button>
+          </div>
+        ) : (
+          <button onClick={login}>Login with Google</button>
+        )}
+      </div>
+
       <Routes>
-        {/* auth routes */}
+        {/* Auth Routes */}
         <Route path="/" element={<WelcomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/home" 
-            element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+
+        {/* Protected Routes */}
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute user={user}>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/profile" element={<ProfilePage />} />
 
-        {/* Redirect any unknown route to WelcomePage */}
-        <Route path="*" element={<Navigate to="/" />} />
+        {/* API Route */}
+        <Route path="/spoonacular/recipes/:id" element={<MealCard />} />
 
-        {/* api routes */}
-        <Route path="spoonacular/recipes/:id" element={<MealCard />} />
-        
+        {/* Catch-all */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
-
-// testFetch
-// function App() {
-//   return (
-//     <div>
-//       <h1>ChefMate Frontend</h1>
-//       <TestFetch />
-//     </div>
-//   );
-// }
-
-// function App() {
-//   const [count, setCount] = useState(0)
-
-//   return (
-//     <>
-//       <div>
-//         <a href="https://vite.dev" target="_blank">
-//           <img src={viteLogo} className="logo" alt="Vite logo" />
-//         </a>
-//         <a href="https://react.dev" target="_blank">
-//           <img src={reactLogo} className="logo react" alt="React logo" />
-//         </a>
-//       </div>
-//       <h1>Vite + React</h1>
-//       <div className="card">
-//         <button onClick={() => setCount((count) => count + 1)}>
-//           count is {count}
-//         </button>
-//         <p>
-//           Edit <code>src/App.tsx</code> and save to test HMR
-//         </p>
-//       </div>
-//       <p className="read-the-docs">
-//         Click on the Vite and React logos to learn more
-//       </p>
-//     </>
-//   )
-// }
-// export default App
-
-

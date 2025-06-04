@@ -5,10 +5,9 @@ import ChefMateLogo from "../../../../assets/Chefmate_LOGO.png";
 import React from "react";
 import api from "../../../../api/axios";
 import { useAuth } from "../../../../context/AuthContext";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import '../../components/Buttons.css'
 
-const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -25,27 +24,9 @@ const LoginPage = () => {
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse: {
-    credential?: string;
-  }) => {
-    if (credentialResponse.credential) {
-      try {
-        // Send Google token to backend for verification and login/signup
-        const res = await api.post("/auth/google-login", {
-          token: credentialResponse.credential,
-        });
-        login(res.data.user); // Save user info in context (adjust to your backend response)
-        navigate("/home");
-      } catch (error) {
-        console.error("Google login failed", error);
-        alert("Google login failed");
-      }
-    }
-  };
 
-  const handleGoogleError = () => {
-    alert("Google login failed");
-  };
+
+
 
   const goToSignup = () => {
     navigate("/signup");
@@ -63,13 +44,6 @@ const LoginPage = () => {
 
         <p className="login-subtitle">Or sign in with Google</p>
 
-        <GoogleOAuthProvider clientId={clientId}>
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={handleGoogleError}
-            useOneTap
-          />
-        </GoogleOAuthProvider>
 
         <p className="login-subtitle">
           New to ChefMate? <br />

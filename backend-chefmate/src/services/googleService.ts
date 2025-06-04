@@ -1,41 +1,94 @@
-import { OAuth2Client } from "google-auth-library";
-import dotenv from "dotenv";
+import express, { Express, Request, Response } from "express";
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import session from "express-session";
+import cors from "cors";
+import { Mongoose } from "mongoose";
 
-dotenv.config();
+const clientID =
+  "805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleusercontent.com";
+const clientSecret = "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";
 
-const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: clientID,
+      clientSecret: clientSecret,
+      callbackURL: "http://localhost:5000/auth/google/callback",
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        return done(null, profile);
+      } catch (err) {
+        return done(err, false);
+      }
+    }
+  )
+);
 
-if (!CLIENT_ID) {
-  throw new Error("Missing GOOGLE_CLIENT_ID in environment variables");
-}
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
 
-const client = new OAuth2Client(CLIENT_ID);
+passport.deserializeUser(function (object, done) {
+  console.log(object);
+  done(null, object as Express.User);
+});
 
-export interface GoogleUserPayload {
-  email: string;
-  name: string;
-  picture?: string;
-  sub: string;
-}
+const app: Express = express();
 
-export async function verifyGoogleToken(
-  idToken: string
-): Promise<GoogleUserPayload> {
-  const ticket = await client.verifyIdToken({
-    idToken,
-    audience: CLIENT_ID,
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options("*", cors(corsOptions));
+
+app.use(
+  session({
+    secret: "verySecretySecret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("Backend running!");
+});
+
+app.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:5173",
+    successRedirect: "http://localhost:5173",
+  })
+);
+
+app.get("/auth/logout", (req: Request, res: Response, next) => {
+  req.logout((err) => {
+    if (err) return next(err);
+    res.sendStatus(200);
   });
+});
 
-  const payload = ticket.getPayload();
+app.get("/auth/user", (req: Request, res: Response) => {
+  res.json(req.user || null);
+});
 
-  if (!payload) {
-    throw new Error("Invalid Google token");
-  }
+const PORT = 5000;
 
-  return {
-    email: payload.email || "",
-    name: payload.name || "",
-    picture: payload.picture,
-    sub: payload.sub || "",
-  };
-}
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
