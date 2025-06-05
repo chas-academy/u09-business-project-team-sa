@@ -11,9 +11,10 @@ console.log("✅ userMealPlanRoutes loaded");
 
 router.get('/', authMiddleware, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const plan = await MealPlan.findById(req.user!._id);
+    const plan = await MealPlan.findById({ userId: req.user!._id });
+
     if (!plan) {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'Meal plan not found' });
       return;
     }
 

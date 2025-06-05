@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import api from '../api/axios';
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -27,13 +27,51 @@ const defaultMealPlan: MealPlan = daysOfWeek.reduce((acc, day) => {
 const MealPlanContext = createContext<{
   mealPlan: MealPlan;
   addMealToPlan: (day: string, mealType: string, meal: MealSlot) => void;
-}>({
+} & { fetchMealPlan: () => void }>({
   mealPlan: defaultMealPlan,
   addMealToPlan: () => {},
+  fetchMealPlan() {},
 });
 
 export const MealPlanProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mealPlan, setMealPlan] = useState<MealPlan>(defaultMealPlan);
+
+  const fetchMealPlan = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      const res = await api.get('/api/mealplan', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const structured: MealPlan = daysOfWeek.reduce((acc, day) => {
+        acc[day] = meals.reduce((acc2, meal) => {
+          acc2[meal] = [];
+          return acc2;
+        }, {} as Record<string, MealSlot[]>);
+        return acc;
+      }, {} as MealPlan);
+
+      for (const entry of res.data) {
+        const { day, mealTime, name, image, _id } = entry;
+
+        if (!structured[day]) structured[day] = {};
+        if (!structured[day][mealTime]) structured[day][mealTime] = [];
+
+        structured[day][mealTime].push({ id: _id, name, image });
+      }
+
+      setMealPlan(structured);
+    } catch (error) {
+      console.error('Failed to fetch meal plan:', error);
+    }
+  };
+
+      useEffect(() => {
+        fetchMealPlan();
+      }, []);
+
 
   const addMealToPlan = async (day: string, mealType: string, meal: MealSlot) => {
     const token = localStorage.getItem('token');
@@ -63,42 +101,10 @@ export const MealPlanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 };
 
   return (
-    <MealPlanContext.Provider value={{ mealPlan, addMealToPlan }}>
+    <MealPlanContext.Provider value={{ mealPlan, addMealToPlan, fetchMealPlan }}>
       {children}
     </MealPlanContext.Provider>
   );
 };
 
 export const useMealPlan = () => useContext(MealPlanContext);
-
- // const addMealToPlan = (day: string, mealType: string, meal: MealSlot) => {
-  //   setMealPlan((prev) => ({
-  //     ...prev,
-  //     [day]: {
-  //       ...prev[day],
-  //       [mealType]: [...prev[day][mealType], meal],
-  //     },
-  //   }));
-  // };
-
-  //   try {
-//     const token = localStorage.getItem('token');
-//     const updatedPlan = {
-//       ...mealPlan,
-//       [day]: {
-//         ...mealPlan[day],
-//         [mealType]: [...mealPlan[day][mealType], meal],
-//       },
-//     };
-
-//     await api.post('/user/mealplan', { plan: updatedPlan }, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-
-//     console.log('Meal plan saved to backend!');
-//   } catch (error) {
-//     console.error('Error saving meal plan to backend:', error);
-//   }
-// };
