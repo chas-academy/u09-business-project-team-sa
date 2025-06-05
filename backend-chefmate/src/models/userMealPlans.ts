@@ -14,8 +14,20 @@ const MealPlanSchema = new mongoose.Schema({
     unique: true,
   },
   plan: {
-    type: Object,
-    required: true,
+    Monday: { type: Object, default: {} },
+    Tuesday: { type: Object, default: {} },
+    Wednesday: { type: Object, default: {} },
+    Thursday: { type: Object, default: {} },
+    Friday: { type: Object, default: {} },
+    Saturday: { type: Object, default: {} },
+    Sunday: { type: Object, default: {} },
+    // Monday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
+    // Tuesday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
+    // Wednesday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
+    // Thursday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
+    // Friday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
+    // Saturday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
+    // Sunday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
   },
 });
 

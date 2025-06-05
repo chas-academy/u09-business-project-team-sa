@@ -1,7 +1,48 @@
 import { Request, Response } from "express";
-// import User from "../models/userModel";
 import MealPlan from "../models/userMealPlans";
-import { authMiddleware, AuthenticatedRequest } from '../middleware/auth';
+import { AuthenticatedRequest } from '../middleware/auth';
+
+// Default meal plan template
+export const generateDefaultMealPlan = () => {
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const meals = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
+  
+  const plan: any = {};
+  for (const day of days) {
+    plan[day] = {};
+    for (const meal of meals) {
+      plan[day][meal] = [];
+    }
+  }
+  return plan;
+};
+
+// Deep merge helper
+export const deepMergeMealPlan = (existingPlan: any, incomingPlan: any) => {
+  const base = generateDefaultMealPlan();
+
+  for (const day in base) {
+    // Start with existing or empty object
+    base[day] = existingPlan[day] || base[day];
+
+    // If there's incoming for this day
+    if (incomingPlan[day]) {
+      for (const meal of Object.keys(base[day])) {
+        const existingMeals = base[day][meal] || [];
+        const newMeals = incomingPlan[day][meal] || [];
+
+        const uniqueMeals = newMeals.filter(
+          (mealItem: any) =>
+            !existingMeals.some((existing: any) => existing.id === mealItem.id)
+        );
+
+        base[day][meal] = [...existingMeals, ...uniqueMeals];
+      }
+    }
+  }
+
+  return base;
+};
 
 export const saveMealPlan = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
@@ -10,21 +51,25 @@ export const saveMealPlan = async (req: AuthenticatedRequest, res: Response): Pr
     console.log("Plan received:", JSON.stringify(req.body.plan, null, 2));
 
     // if (!req.user?._id) return res.status(401).json({ error: "Unauthorized" });
-
+    const incoming = req.body.plan;
     const existing = await MealPlan.findOne({ userId: req.user!._id });
-
+    
     if (existing) {
-      existing.plan = req.body.plan;
+      existing.plan = deepMergeMealPlan(existing.plan, incoming);
+      console.log("Before save, merged plan:", JSON.stringify(existing.plan, null, 2));
       await existing.save();
       console.log("Updated meal plan in DB");
-    } else {
+      } else {
+      const newPlan = deepMergeMealPlan({}, incoming);
+      console.log("Before save, merged plan:", JSON.stringify(newPlan, null, 2));
+
       await MealPlan.create({
         userId: req.user!._id,
-        plan: req.body.plan,
+        plan: newPlan,
       });
-      console.log("Incoming meal plan:", req.body.plan);
-    }
-
+      console.log("Created new meal plan in DB");
+      }
+    
     res.status(200).json({ message: "Meal plan saved!" });
   } catch (error) {
     console.error("Error saving meal plan:", error);
@@ -32,23 +77,19 @@ export const saveMealPlan = async (req: AuthenticatedRequest, res: Response): Pr
   }
 };
 
-// export const saveMealPlan = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-//   try {
-//     const user = await User.findById(req.user!._id);
+// get meal plan
+export const getMealPlan = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const plan = await MealPlan.findOne({ userId: req.user!._id });
 
-//     if (!user) {
-//         res.status(404).json({ message: "User not found" });
-//         return;
-//     }
+    if (!plan) {
+      res.status(200).json({}); // Send empty object if no plan exists yet
+      return;
+    }
 
-//     user.mealPlan = req.body.plan;
-//     await user.save();
-
-//     res.status(200).json({ message: "Meal plan saved!" });
-//   } catch (error) {
-//     console.error("Error saving meal plan:", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
-
-
+    res.status(200).json(plan.plan); // Return only the nested `plan`
+  } catch (error) {
+    console.error('Error fetching meal plan:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

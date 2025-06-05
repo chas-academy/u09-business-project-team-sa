@@ -31,6 +31,7 @@ function App() {
 
         {/* api routes */}
         <Route path="spoonacular/recipes/:id" element={<MealCard />} />
+        <Route path="/meal/:id" element={<MealCard />} />
         
         {/* Redirect any unknown route to WelcomePage */}
         <Route path="*" element={<Navigate to="/" />} />

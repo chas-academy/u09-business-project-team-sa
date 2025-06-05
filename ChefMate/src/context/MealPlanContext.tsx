@@ -45,48 +45,85 @@ export const MealPlanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const structured: MealPlan = daysOfWeek.reduce((acc, day) => {
-        acc[day] = meals.reduce((acc2, meal) => {
-          acc2[meal] = [];
-          return acc2;
-        }, {} as Record<string, MealSlot[]>);
-        return acc;
-      }, {} as MealPlan);
+      const dbPlan = res.data; // This should be the full nested plan
 
-      for (const entry of res.data) {
-        const { day, mealTime, name, image, _id } = entry;
+    // Ensure all days and meal types exist even if empty
+    const filledPlan: MealPlan = daysOfWeek.reduce((acc, day) => {
+      acc[day] = meals.reduce((acc2, meal) => {
+        acc2[meal] = dbPlan?.[day]?.[meal] || [];
+        return acc2;
+      }, {} as Record<string, MealSlot[]>);
+      return acc;
+    }, {} as MealPlan);
 
-        if (!structured[day]) structured[day] = {};
-        if (!structured[day][mealTime]) structured[day][mealTime] = [];
+    setMealPlan(filledPlan);
+  } catch (error) {
+    console.error('Failed to fetch meal plan:', error);
+  }
+};
+  //     const structured: MealPlan = daysOfWeek.reduce((acc, day) => {
+  //       acc[day] = meals.reduce((acc2, meal) => {
+  //         acc2[meal] = [];
+  //         return acc2;
+  //       }, {} as Record<string, MealSlot[]>);
+  //       return acc;
+  //     }, {} as MealPlan);
 
-        structured[day][mealTime].push({ id: _id, name, image });
-      }
+  //     for (const entry of res.data) {
+  //       const { day, mealTime, name, image, _id } = entry;
 
-      setMealPlan(structured);
-    } catch (error) {
-      console.error('Failed to fetch meal plan:', error);
-    }
-  };
+  //       if (!structured[day]) structured[day] = {};
+  //       if (!structured[day][mealTime]) structured[day][mealTime] = [];
+
+  //       structured[day][mealTime].push({ id: _id, name, image });
+  //     }
+
+  //     setMealPlan(structured);
+  //   } catch (error) {
+  //     console.error('Failed to fetch meal plan:', error);
+  //   }
+  // };
 
       useEffect(() => {
         fetchMealPlan();
       }, []);
 
+  const normalizeMealType = (type: string) =>
+    type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
 
   const addMealToPlan = async (day: string, mealType: string, meal: MealSlot) => {
+    const normalizedType = normalizeMealType(mealType);
+
     const token = localStorage.getItem('token');
     console.log('Token from localStorage:', token);
     console.log('Token:', token);  // debug check for token
+    if (!token) return;
 
   setMealPlan(prev => {
     const updated = { ...prev };
 
-    if (!updated[day]) updated[day] = { breakfast: [], lunch: [], dinner: [], snacks: [] };
-    if (!updated[day][mealType]) updated[day][mealType] = [];
-    
-    updated[day][mealType].push(meal);
+    if (!updated[day]) {
+      updated[day] = { Breakfast: [], Lunch: [], Dinner: [], Snacks: [] };
+    }
 
-    api.post('/mealplan', { plan: updated }, {
+    if (!updated[day][normalizedType]) {
+      updated[day][normalizedType] = [];
+    }
+
+    // Prevent duplicates by ID
+    const alreadyExists = updated[day][normalizedType].some(m => m.id === meal.id);
+    if (!alreadyExists) {
+    updated[day][normalizedType].push(meal);
+    }
+
+    // Send only the new slot update to backend
+    const singleSlotUpdate = {
+      [day]: {
+        [normalizedType]: updated[day][normalizedType],
+      },
+    };
+
+    api.post('/mealplan', { plan: singleSlotUpdate }, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

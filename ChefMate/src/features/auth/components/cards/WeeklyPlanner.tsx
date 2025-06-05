@@ -1,5 +1,7 @@
 import React from 'react';
 import { MealPlan, MealSlot } from '../../../../context/MealPlanContext';
+import { Link } from 'react-router-dom';
+
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const meals = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
@@ -27,6 +29,7 @@ const WeeklyPlanner: React.FC<WeeklyPlannerProps> = ({ mealPlan }) => {
                 {mealPlan[day] && mealPlan[day][meal]?.length > 0 ? (
                   mealPlan[day][meal].map((mealSlot: MealSlot, i: number) => (
                     <li key={i}>
+                      <Link to={`/meal/${mealSlot.id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
                       {mealSlot.image && (
                         <img
                           src={mealSlot.image}
@@ -35,6 +38,7 @@ const WeeklyPlanner: React.FC<WeeklyPlannerProps> = ({ mealPlan }) => {
                         />
                       )}
                       {mealSlot.name}
+                      </Link>
                     </li>
                   ))
                 ) : (
