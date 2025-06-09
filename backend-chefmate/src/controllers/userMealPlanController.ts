@@ -18,26 +18,25 @@ export const generateDefaultMealPlan = () => {
 };
 
 // Deep merge helper
-export const deepMergeMealPlan = (existingPlan: any, incomingPlan: any) => {
+export const deepMergeMealPlan = (existingPlan: any = {}, incomingPlan: any = {}) => {
   const base = generateDefaultMealPlan();
 
   for (const day in base) {
-    // Start with existing or empty object
-    base[day] = existingPlan[day] || base[day];
+    for (const meal of Object.keys(base[day])) {
+      const existingMeals = Array.isArray(existingPlan?.[day]?.[meal]) 
+        ? existingPlan[day][meal]
+        : [];
 
-    // If there's incoming for this day
-    if (incomingPlan[day]) {
-      for (const meal of Object.keys(base[day])) {
-        const existingMeals = base[day][meal] || [];
-        const newMeals = incomingPlan[day][meal] || [];
+      const newMeals = Array.isArray(incomingPlan?.[day]?.[meal]) 
+        ? incomingPlan[day][meal]
+        : [];
 
-        const uniqueMeals = newMeals.filter(
-          (mealItem: any) =>
-            !existingMeals.some((existing: any) => existing.id === mealItem.id)
-        );
+      const uniqueMeals = newMeals.filter(
+        (mealItem: any) =>
+          !existingMeals.some((existing: any) => existing.id === mealItem.id)
+      );
 
-        base[day][meal] = [...existingMeals, ...uniqueMeals];
-      }
+      base[day][meal] = [...existingMeals, ...uniqueMeals];
     }
   }
 
@@ -45,6 +44,9 @@ export const deepMergeMealPlan = (existingPlan: any, incomingPlan: any) => {
 };
 
 export const saveMealPlan = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  console.log("✅ saveMealPlan controller hit");  // 
+  const { plan } = req.body;
+  
   try {
     console.log("Save meal plan route triggered");
     console.log("User ID:", req.user?._id);
@@ -78,18 +80,64 @@ export const saveMealPlan = async (req: AuthenticatedRequest, res: Response): Pr
 };
 
 // get meal plan
-export const getMealPlan = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  export const getMealPlan = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const plan = await MealPlan.findOne({ userId: req.user!._id });
+    const planDoc = await MealPlan.findOne({ userId: req.user!._id });
 
-    if (!plan) {
-      res.status(200).json({}); // Send empty object if no plan exists yet
+    if (!planDoc) {
+      res.status(200).json({}); // No plan yet
       return;
     }
 
-    res.status(200).json(plan.plan); // Return only the nested `plan`
+    const normalizedPlan: any = {};
+    // const rawPlan = planDoc.plan;
+    const rawPlan = planDoc.plan as Record<string, Record<string, any>>;
+
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const meals = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
+
+    for (const day of days) {
+      normalizedPlan[day] = {};
+      for (const meal of meals) {
+        const slot = rawPlan?.[day]?.[meal];
+
+        if (Array.isArray(slot)) {
+          normalizedPlan[day][meal] = slot;
+        } else if (typeof slot === 'object' && slot !== null) {
+          normalizedPlan[day][meal] = [slot]; // Wrap object in array
+        } else {
+          normalizedPlan[day][meal] = []; // Empty
+        }
+      }
+    }
+
+    res.status(200).json({ plan: normalizedPlan });
   } catch (error) {
     console.error('Error fetching meal plan:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+
+// export const getMealPlan = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+//   try {
+//     const plan = await MealPlan.findOne({ userId: req.user!._id });
+
+//     if (!Array.isArray(plan[day][mealType])) {
+//       plan[day][mealType] = [plan[day][mealType]];
+//     } {
+//       res.status(200).json({}); // Send empty object if no plan exists yet
+//       return;
+//     }
+
+//     // if (!plan) {
+//     //   res.status(200).json({}); // Send empty object if no plan exists yet
+//     //   return;
+//     // }
+
+//     res.status(200).json(plan.plan); // Return only the nested `plan`
+//   } catch (error) {
+//     console.error('Error fetching meal plan:', error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };

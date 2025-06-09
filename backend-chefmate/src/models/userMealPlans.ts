@@ -1,34 +1,59 @@
 import mongoose from 'mongoose';
-
-const MealSlotSchema = new mongoose.Schema({
+//new
+const mealSchema = new mongoose.Schema({
   id: String,
-  name: String,
-  image: String,
+  title: String,
+  // add other meal properties you may be using
 });
 
-const MealPlanSchema = new mongoose.Schema({
-  userId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User', 
+const daySchema = new mongoose.Schema({
+  Breakfast: [mealSchema],
+  Lunch: [mealSchema],
+  Dinner: [mealSchema],
+  Snacks: [mealSchema],
+});
+
+const mealPlanSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
+    ref: "User",
     unique: true,
   },
   plan: {
-    Monday: { type: Object, default: {} },
-    Tuesday: { type: Object, default: {} },
-    Wednesday: { type: Object, default: {} },
-    Thursday: { type: Object, default: {} },
-    Friday: { type: Object, default: {} },
-    Saturday: { type: Object, default: {} },
-    Sunday: { type: Object, default: {} },
-    // Monday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
-    // Tuesday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
-    // Wednesday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
-    // Thursday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
-    // Friday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
-    // Saturday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
-    // Sunday: { Breakfast: [MealSlotSchema], Lunch: [MealSlotSchema], Dinner: [MealSlotSchema], Snacks: [MealSlotSchema] },
+    Monday: daySchema,
+    Tuesday: daySchema,
+    Wednesday: daySchema,
+    Thursday: daySchema,
+    Friday: daySchema,
+    Saturday: daySchema,
+    Sunday: daySchema,
   },
 });
 
-export default mongoose.model('MealPlan', MealPlanSchema);
+// this was all before
+// const MealSlotSchema = new mongoose.Schema({
+//   id: String,
+//   name: String,
+//   image: String,
+// });
+
+// const MealPlanSchema = new mongoose.Schema({
+//   userId: { 
+//     type: mongoose.Schema.Types.ObjectId, 
+//     ref: 'User', 
+//     required: true,
+//     unique: true,
+//   },
+//   plan: {
+//     Monday: { type: Object, default: {} },
+//     Tuesday: { type: Object, default: {} },
+//     Wednesday: { type: Object, default: {} },
+//     Thursday: { type: Object, default: {} },
+//     Friday: { type: Object, default: {} },
+//     Saturday: { type: Object, default: {} },
+//     Sunday: { type: Object, default: {} },
+//   },
+// });
+
+export default mongoose.model('MealPlan', mealPlanSchema);

@@ -37,20 +37,37 @@ export const MealPlanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [mealPlan, setMealPlan] = useState<MealPlan>(defaultMealPlan);
 
   const fetchMealPlan = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
+  const token = localStorage.getItem('token');
+  if (!token) return;
 
-    try {
-      const res = await api.get('/api/mealplan', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  try {
+    const res = await api.get('/api/mealplan', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      const dbPlan = res.data; // This should be the full nested plan
+    const dbPlan = res.data?.plan || {}; // Your backend sends { plan: {...} }
 
-    // Ensure all days and meal types exist even if empty
     const filledPlan: MealPlan = daysOfWeek.reduce((acc, day) => {
       acc[day] = meals.reduce((acc2, meal) => {
-        acc2[meal] = dbPlan?.[day]?.[meal] || [];
+        const slot = dbPlan?.[day]?.[meal];
+
+        // Ensure every slot is an array
+        if (Array.isArray(slot)) {
+          acc2[meal] = slot.map((m: any) => ({
+            id: m.id,
+            name: m.name || m.title || 'Unnamed',
+            image: m.image || '',
+          }));
+        } else if (typeof slot === 'object' && slot !== null) {
+          acc2[meal] = [{
+            id: slot.id,
+            name: slot.name || slot.title || 'Unnamed',
+            image: slot.image || '',
+          }];
+        } else {
+          acc2[meal] = [];
+        }
+
         return acc2;
       }, {} as Record<string, MealSlot[]>);
       return acc;
@@ -61,28 +78,6 @@ export const MealPlanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     console.error('Failed to fetch meal plan:', error);
   }
 };
-  //     const structured: MealPlan = daysOfWeek.reduce((acc, day) => {
-  //       acc[day] = meals.reduce((acc2, meal) => {
-  //         acc2[meal] = [];
-  //         return acc2;
-  //       }, {} as Record<string, MealSlot[]>);
-  //       return acc;
-  //     }, {} as MealPlan);
-
-  //     for (const entry of res.data) {
-  //       const { day, mealTime, name, image, _id } = entry;
-
-  //       if (!structured[day]) structured[day] = {};
-  //       if (!structured[day][mealTime]) structured[day][mealTime] = [];
-
-  //       structured[day][mealTime].push({ id: _id, name, image });
-  //     }
-
-  //     setMealPlan(structured);
-  //   } catch (error) {
-  //     console.error('Failed to fetch meal plan:', error);
-  //   }
-  // };
 
       useEffect(() => {
         fetchMealPlan();
