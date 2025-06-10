@@ -41,7 +41,7 @@ export const MealPlanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   if (!token) return;
 
   try {
-    const res = await api.get('/api/mealplan', {
+    const res = await api.get('/mealplan', {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -74,10 +74,18 @@ export const MealPlanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }, {} as MealPlan);
 
     setMealPlan(filledPlan);
-  } catch (error) {
-    console.error('Failed to fetch meal plan:', error);
+  } catch (error: any) {
+  if (error.response) {
+    console.error('❌ Failed to fetch meal plan - Server responded with:', error.response.status, error.response.data);
+  } else if (error.request) {
+    console.error('❌ Failed to fetch meal plan - No response received:', error.request);
+  } else {
+    console.error('❌ Failed to fetch meal plan - Other error:', error.message);
   }
-};
+  // catch (error) {
+  //   console.error('Failed to fetch meal plan:', error);
+  // }
+}};
 
       useEffect(() => {
         fetchMealPlan();

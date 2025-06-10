@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
-//new
+
 const mealSchema = new mongoose.Schema({
   id: String,
-  title: String,
-  // add other meal properties you may be using
+  name: String,
+  // title: String,
+  image: String,
 });
 
 const daySchema = new mongoose.Schema({
@@ -30,30 +31,5 @@ const mealPlanSchema = new mongoose.Schema({
     Sunday: daySchema,
   },
 });
-
-// this was all before
-// const MealSlotSchema = new mongoose.Schema({
-//   id: String,
-//   name: String,
-//   image: String,
-// });
-
-// const MealPlanSchema = new mongoose.Schema({
-//   userId: { 
-//     type: mongoose.Schema.Types.ObjectId, 
-//     ref: 'User', 
-//     required: true,
-//     unique: true,
-//   },
-//   plan: {
-//     Monday: { type: Object, default: {} },
-//     Tuesday: { type: Object, default: {} },
-//     Wednesday: { type: Object, default: {} },
-//     Thursday: { type: Object, default: {} },
-//     Friday: { type: Object, default: {} },
-//     Saturday: { type: Object, default: {} },
-//     Sunday: { type: Object, default: {} },
-//   },
-// });
 
 export default mongoose.model('MealPlan', mealPlanSchema);

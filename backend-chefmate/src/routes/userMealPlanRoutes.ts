@@ -9,21 +9,21 @@ const router = express.Router();
 
 console.log("✅ userMealPlanRoutes loaded");
 
-router.get('/', authMiddleware, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-  try {
-    // const plan = await MealPlan.findById({ userId: req.user!._id });
-    const plan = await MealPlan.findOne({ userId: req.user!._id });
+// router.get('/', authMiddleware, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+//   try {
+//     // const plan = await MealPlan.findById({ userId: req.user!._id });
+//     const plan = await MealPlan.findOne({ userId: req.user!._id });
 
-    if (!plan) {
-      res.status(404).json({ message: 'Meal plan not found' });
-      return;
-    }
+//     if (!plan) {
+//       res.status(404).json({ message: 'Meal plan not found' });
+//       return;
+//     }
 
-    res.json(plan);
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
-  }
-});
+//     res.json(plan);
+//   } catch (err: any) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
 // Create or update meal plan
 router.post('/', authMiddleware, saveMealPlan);

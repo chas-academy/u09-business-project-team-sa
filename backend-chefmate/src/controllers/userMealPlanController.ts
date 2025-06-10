@@ -2,6 +2,35 @@ import { Request, Response } from "express";
 import MealPlan from "../models/userMealPlans";
 import { AuthenticatedRequest } from '../middleware/auth';
 
+// Normalize a single meal
+const normalizeMeal = (meal: any) => ({
+  id: meal.id,
+  name: meal.title || meal.name || 'Unnamed',
+  image: meal.image || '', // Optional
+});
+
+// Normalize the entire plan
+const normalizeIncomingPlan = (plan: any) => {
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const meals = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
+
+  const normalizedPlan: any = {};
+
+  for (const day of days) {
+    normalizedPlan[day] = {};
+
+    for (const meal of meals) {
+      const original = plan?.[day]?.[meal] || [];
+      normalizedPlan[day][meal] = Array.isArray(original)
+        ? original.map(normalizeMeal)
+        : [];
+    }
+  }
+
+  return normalizedPlan;
+};
+
+
 // Default meal plan template
 export const generateDefaultMealPlan = () => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -53,7 +82,8 @@ export const saveMealPlan = async (req: AuthenticatedRequest, res: Response): Pr
     console.log("Plan received:", JSON.stringify(req.body.plan, null, 2));
 
     // if (!req.user?._id) return res.status(401).json({ error: "Unauthorized" });
-    const incoming = req.body.plan;
+    // const incoming = req.body.plan;
+    const incoming = normalizeIncomingPlan(req.body.plan);
     const existing = await MealPlan.findOne({ userId: req.user!._id });
     
     if (existing) {
@@ -88,9 +118,7 @@ export const saveMealPlan = async (req: AuthenticatedRequest, res: Response): Pr
       res.status(200).json({}); // No plan yet
       return;
     }
-
-    const normalizedPlan: any = {};
-    // const rawPlan = planDoc.plan;
+const normalizedPlan: any = {};
     const rawPlan = planDoc.plan as Record<string, Record<string, any>>;
 
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -117,27 +145,3 @@ export const saveMealPlan = async (req: AuthenticatedRequest, res: Response): Pr
     res.status(500).json({ message: 'Server error' });
   }
 };
-
-
-// export const getMealPlan = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-//   try {
-//     const plan = await MealPlan.findOne({ userId: req.user!._id });
-
-//     if (!Array.isArray(plan[day][mealType])) {
-//       plan[day][mealType] = [plan[day][mealType]];
-//     } {
-//       res.status(200).json({}); // Send empty object if no plan exists yet
-//       return;
-//     }
-
-//     // if (!plan) {
-//     //   res.status(200).json({}); // Send empty object if no plan exists yet
-//     //   return;
-//     // }
-
-//     res.status(200).json(plan.plan); // Return only the nested `plan`
-//   } catch (error) {
-//     console.error('Error fetching meal plan:', error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// };
