@@ -29,17 +29,7 @@ const LoginPage = () => {
       alert("Invalid credentials");
     }
   };
-  // const handleLogin = async (email: string, password: string) => {
-  //   try {
-  //     const res = await api.post("/users/login", { email, password });
-  //     login(res.data.user); // Save user in context
-  //     navigate("/home");
-  //   } catch (err) {
-  //     console.error("Login failed", err);
-  //     alert("Invalid credentials");
-  //   }
-  // };
-
+  
   const handleGoogleSuccess = async (credentialResponse: {
     credential?: string;
   }) => {

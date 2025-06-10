@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // baseURL: 'http://localhost:5000',
-  baseURL: 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL, // Load from environment
+  withCredentials: true // If you're using cookies/session-based auth
 });
 
 api.interceptors.request.use((config) => {
@@ -12,12 +12,16 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
-
-export default api;
-
 // const api = axios.create({
-//   baseURL: 'http://localhost:5000/api/', // or use ENV
-//   withCredentials: false // true if you use sessions/cookies
+//   baseURL: 'http://localhost:5000/api',
 // });
 
-// export default api;
+// api.interceptors.request.use((config) => {
+//   const token = localStorage.getItem('token');
+//   if (token && config.headers) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
+
+export default api;
