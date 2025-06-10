@@ -49,3 +49,8 @@ VITE_GOOGLE_CLIENT_ID=805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleu
 npm install axios
 npm install react-router-dom
 npm install --save-dev @types/react-router-dom
+
+add an .env.production to front end with
+VITE_GOOGLE_CLIENT_ID=805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleusercontent.com
+
+VITE_API_BASE_URL=https://chefmate-backend-server.onrender.com/api
