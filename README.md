@@ -57,26 +57,27 @@ Built with the MEAN stack, it combines a robust backend with an interactive fron
 |                     |     |              | spponacular.ts             |
 | app.ts              |                    |
 
-| 📂 frontend service |       |             |                     |           |
-|---------------------|-------|-------------|---------------------|-----------|
-| ChefMate/           |       |             |                     |           |
-|                     | src/  |             |                     |           |
-|                     |       | api/        |                     |           |
-|                     |       |             | axios.ts            |           |
-|                     |       | app/        |                     |           |
-|                     |       |             | app.tsx             |           |
-|                     |       | assets/     |                     |           |
-|                     |       | context/    |                     |           |
-|                     |       |             | AuthContext.tsx     |           |
-|                     |       |             | MealPlanContext.tsx |           |
-|                     |       | features/   |                     |           |
-|                     |       |             | components/         |           |
-|                     |       |             |                     | cards/    |
-|                     |       |             |                     | forms/    |
-|                     |       |             | pages/              |           |
-|                     |       |             | styles/             |           |
-|                     |       |             |                     | index.css |
-|                     |       | main.tsx    |                     |           |
+| 📂 frontend service |       |             |                     |             |
+|---------------------|-------|-------------|---------------------|-------------|
+| ChefMate/           |       |             |                     |             |
+|                     | src/  |             |                     |             |
+|                     |       | api/        |                     |             |
+|                     |       |             | axios.ts            |             |
+|                     |       | app/        |                     |             |
+|                     |       |             | app.tsx             |             |
+|                     |       | assets/     |                     |             |
+|                     |       | context/    |                     |             |
+|                     |       |             | AuthContext.tsx     |             |
+|                     |       |             | MealPlanContext.tsx |             |
+|                     |       | features/   |                     |             |
+|                     |       |             | components/         |             |
+|                     |       |             |                     | cards/      |
+|                     |       |             |                     | forms/      |
+|                     |       |             | pages/              |             |
+|                     |       |             | styles/             |             |
+|                     |       |             |                     | index.css   |
+|                     |       |             |                     | buttons.css |
+|                     |       | main.tsx    |                     |             |
 
 ## 🌐 Live URLs
 
