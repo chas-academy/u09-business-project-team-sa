@@ -21,20 +21,6 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 };
-// const corsOptions: CorsOptionsDelegate = (req, callback) => {
-//   const allowedOrigins = [
-//     "http://localhost:5173",
-//     "https://chef-mate.netlify.app",
-//     "https://chefmate-backend-server.onrender.com"
-//   ];
-
-//   const origin = req.headers.origin || "";
-//   if (!origin || allowedOrigins.includes(origin)) {
-//     callback(null, { origin: true });
-//   } else {
-//     callback(new Error("Not allowed by CORS"));
-//   }
-// };
 
 app.use(cors(corsOptions));
 app.use(express.json());

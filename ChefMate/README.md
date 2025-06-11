@@ -1,54 +1,56 @@
-# React + TypeScript + Vite
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/N68_urbh)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+backend installs
 
-Currently, two official plugins are available:
+npm init -y
+npm install express cors dotenv mongoose
+npm install --save-dev nodemon
+npm i --save-dev @types/node
+npm install --save-dev @types/express
+npm install --save-dev @types/express @types/cors
+npm install --save-dev @types/react @types/react-dom
+npm install --save-dev ts-node typescript @types/node nodemon
+npm install --save-dev typescript
+npm install mongoose
+npm install axios dotenv
+npx tsc --init //for the tsconfig.sjon
+npm install bcrypt
+npm i --save-dev @types/bcrypt
+-----
+For Google oAuth: 
+npm install @react-oauth/google
+npm install jwt-decode
+npm install google-auth-library
+npm install react-router-dom
+-----
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+added this under scripts
+    "start": "node app.ts",
+    "dev": "nodemon app.ts",
+made app.ts file
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+make your .env file with this - Backend
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+MONGO_URI_PROD=mongodb+srv://username:password@YOURcluster.kcotv.mongodb.net/ChefMate?retryWrites=true&w=majority&appName=YourCluster
+PORT=5000
+MONGO_URI_LOCAL=mongodb://localhost:27017/ChefMate
+NODE_ENV=dev
+SESSION_SECRET=your secretkey
+SPOONACULAR_API_KEY=log in and get your own api key
+GOOGLE_CLIENT_ID=805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleusercontent.com
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+frontend installs
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+create a .env file in frontend as well with this
+VITE_GOOGLE_CLIENT_ID=805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleusercontent.com
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+
+npm install axios
+npm install react-router-dom
+npm install --save-dev @types/react-router-dom
+
+add an .env.production to front end with
+VITE_GOOGLE_CLIENT_ID=805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleusercontent.com
+
+VITE_API_BASE_URL=https://chefmate-backend-server.onrender.com/api
