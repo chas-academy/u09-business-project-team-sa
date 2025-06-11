@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '../../../../api/axios';
+import styles from './MealCard.module.css';
 import './MealCard.css';
-import '../../components/Buttons.css';
+import '../../../../styles/Buttons.css';
 import mockMeals from '../../../../mocks/mockMeals';
 import { useMealPlan } from '../../../../context/MealPlanContext';
 
@@ -43,27 +44,9 @@ const MealCard = () => {
     navigate('/home');
   }
 
-//   const onSave = async (mealId: string) => {
-//   try {
-//     const token = localStorage.getItem('token'); // or sessionStorage if you store it there
-
-//     const response = await api.post(
-//       '/user/favorites',
-//       { mealId }, // or the whole meal if you store full data
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-
-//     console.log('Meal saved!', response.data);
-//     alert('Meal saved successfully!');
-//   } catch (error) {
-//     console.error('Failed to save meal:', error);
-//     alert('Failed to save meal. You might not be logged in.');
-//   }
-// };
+  const handleViewProfile = () => {
+    navigate('/profile');
+  }
 
   useEffect(() => {
     const fetchMeal = async () => {
@@ -89,13 +72,12 @@ const MealCard = () => {
     <div className="meal-card-detailed">
       <button onClick={handleViewHome} className="home-button">Home</button>
       {meal.image && (
-        <img src={meal.image} alt={meal.name} className="meal-image" />
+        <img src={meal.image} alt={meal.name} className={styles.image} />
       )}
 
       <h2>{meal.name}</h2>
 
       <div className="diet-info">
-        {/* <p>Dish Type: {meal.dishType }</p> */}
         <p>Dish Type: {meal.dishTypes && meal.dishTypes.length > 0 
             ? meal.dishTypes.join(', ') 
             : 'N/A'}
@@ -104,15 +86,12 @@ const MealCard = () => {
         <p>Vegan: {meal.vegan ? '✅' : '❌'}</p>
         <p>Gluten-Free: {meal.glutenFree ? '✅' : '❌'}</p>
         <p>Dairy-Free: {meal.dairyFree ? '✅' : '❌'}</p>
-        {/* <p>Calories: {Math.round(meal.calories)} kcal</p> */}
         <p>Calories: {meal.calories ? `${Math.round(meal.calories)} kcal` : 'N/A'}</p>
         <p>Time to Make: {meal.timeToMake ? `${meal.timeToMake} min` : 'N/A'}</p>
         <p>Servings: {meal.servings ?? 'N/A'}</p>
         <p>Protein: {meal.protein ? `${Math.round(meal.protein)} g` : 'N/A'}</p>
         <p>Fat: {meal.fat ? `${Math.round(meal.fat)} g` : 'N/A'}</p>
       </div>
-
-      {/* {meal.description && <p>{meal.description.replace(/<\/?[^>]+(>|$)/g, '')}</p>} */}
 
       <div className='meal.content'>
       {meal.ingredients && (
@@ -146,11 +125,12 @@ const MealCard = () => {
     </div>
 
       <h2>Enjoy!</h2>
-      {/* <button onClick={() => onSave(meal.id)} className='save-button'>Save</button> */}
     
+      <button onClick={handleViewProfile} className="profile-button">View Profile</button>
+
       <button onClick={() => setShowPlannerSelector(!showPlannerSelector)} className='save-button'>
   {showPlannerSelector ? 'Cancel' : 'Save to Calendar'}
-</button>
+      </button>
 
 {showPlannerSelector && (
   <div className="planner-selector">

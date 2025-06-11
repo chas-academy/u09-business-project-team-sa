@@ -1,5 +1,6 @@
 import './FavoritesCard.css'
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 
 interface Meal {
   id: string;
@@ -14,11 +15,17 @@ interface FavoritesCardProps {
 }
 
 const FavoritesCard: React.FC<FavoritesCardProps> = ({ favorites, onRemoveFavorite }) => {
+  const navigate = useNavigate();
+
+  const handleViewHome = () => {
+    navigate('/home');
+  }
+  
   return (
     <div className="mt-6 p-4 bg-white shadow-lg rounded-2xl w-full">
       <h2 className="text-xl font-semibold mb-4 text-gray-800">⭐ Favorite Meals</h2>
       {favorites.length === 0 ? (
-        <p className="text-gray-500">You haven't saved any meals yet.</p>
+        <p className="text-gray-500">You haven't liked any meals yet.</p>
       ) : (
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {favorites.map((meal) => (
@@ -44,6 +51,8 @@ const FavoritesCard: React.FC<FavoritesCardProps> = ({ favorites, onRemoveFavori
           ))}
         </ul>
       )}
+        <button onClick={handleViewHome} className="home-button">Search for meals!</button>
+
     </div>
   );
 };

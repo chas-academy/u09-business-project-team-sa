@@ -30,6 +30,13 @@
   color: #555;
 }
 
+.image {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+
 .diet-info p {
   margin: 0.2rem 0;
   font-weight: bold;

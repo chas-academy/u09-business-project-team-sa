@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
 
 import { MealPlanProvider } from '../context/MealPlanContext'
+import { HomeProvider } from '../context/HomeContext'
 
 import './App.css'
 import LoginPage from '../features/auth/pages/Login/LoginPage'
@@ -18,6 +19,7 @@ import ProfilePage from '../features/auth/pages/Profile/ProfilePage'
 
 function App() {
   return (
+  <HomeProvider>
   <MealPlanProvider>
     <Router>
       <Routes>
@@ -39,6 +41,7 @@ function App() {
       </Routes>
     </Router>
   </MealPlanProvider>
+  </HomeProvider>
   );
 }
 

@@ -21,7 +21,7 @@ type RecipeCardProps = {
   offset: number;
 };
 
-const RecipeCard = ({ title, meals, onSave, onMore, onBack, searchTerm, offset }: RecipeCardProps) => {
+const RecipeCard = ({ title, meals, onMore, onBack, searchTerm, offset }: RecipeCardProps) => {
   const navigate = useNavigate();
 
   return (
@@ -37,24 +37,16 @@ const RecipeCard = ({ title, meals, onSave, onMore, onBack, searchTerm, offset }
               src={meal.image}
               alt={meal.name}
               className='meal-image'
-              // style={{
-              //   width: '100%',
-              //   height: '140px',
-              //   objectFit: 'cover',
-              //   borderRadius: '8px',
-              //   marginBottom: '10px'
-              // }}
             />
           )}
 
-            <button onClick={() => onSave(meal.id)}>Save</button>
+            {/* <button onClick={() => onSave(meal.id)}>Save</button> */}
             <button onClick={() => navigate(`/spoonacular/recipes/${meal.id}`)}>View</button>
           </div>
         ))}
       </div>
 
       <div className="card-controls">
-        {/* <button onClick={onBack} disabled={searchTerm && offset === 0}>Back</button> */}
         {searchTerm && offset > 0 && (
         <button onClick={onBack} className='back-button'>Back</button>
         )}

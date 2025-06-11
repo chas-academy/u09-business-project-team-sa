@@ -82,9 +82,6 @@ export const MealPlanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   } else {
     console.error('❌ Failed to fetch meal plan - Other error:', error.message);
   }
-  // catch (error) {
-  //   console.error('Failed to fetch meal plan:', error);
-  // }
 }};
 
       useEffect(() => {

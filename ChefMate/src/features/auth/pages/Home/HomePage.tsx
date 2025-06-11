@@ -7,13 +7,15 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import ChefMateLogo from '../../../../assets/Chefmate_LOGO.png'
 import { useEffect, useState } from 'react';
 import api from '../../../../api/axios';
-import '../../components/Buttons.css';
+import '../../../../styles/Buttons.css';
 import mockMeals from '../../../../mocks/mockMeals';
+// import { handleSearch, handleBack, handleClear, handleMore } from '../../../../context/HomeContext';
+import { useHome } from '../../../../context/HomeContext';
 
 type Meal = {
   id: string;
   title?: string;
-  name?: string; //to use mockmeals
+  name?: string;
   image?: string;
 };
 
@@ -22,13 +24,18 @@ const HomePage = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const [meals, setMeals] = useState<Meal[]>([]);
-  const [loading, setLoading] = useState(true);
+  // const [meals, setMeals] = useState<Meal[]>([]);
+  // const [loading, setLoading] = useState(true);
 
-  const [searchTerm, setSearchTerm] = useState('');
+  // const [searchTerm, setSearchTerm] = useState('');
 
-  const [offset, setOffset] = useState(0); // for search pagination
-  const [randomFetchCount, setRandomFetchCount] = useState(0); 
+  // const [offset, setOffset] = useState(0); // for search pagination
+  // const [randomFetchCount, setRandomFetchCount] = useState(0); 
+
+  const {
+  meals, loading, searchTerm, offset,
+  handleSearch, handleClear, handleMore, handleBack
+} = useHome();
 
   const handleLogout = () => {
     logout();         // Clear the user
@@ -43,94 +50,31 @@ const HomePage = () => {
   console.log(`Meal ${mealId} saved!`);
   };
 
-  const handleSearch = async (query: string) => {
-    setSearchTerm(query);
-    setOffset(0);
-    setLoading(true);
-    try {
-      const res = await api.get(`spoonacular/recipes?q=${query}&offset=0`);
-      setMeals(res.data.results);
-    } catch (err) {
-      console.error('Search failed, using mock data:', err);
-      setMeals(mockMeals);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // handleMore ();
+  // handleBack ();
+  // handleClear();
 
-  const handleClear = async () => {
-  setSearchTerm('');
-  setLoading(true);
-  try {
-    const res = await api.get('/meals/popular');
-    setMeals(res.data);
-  } catch (err) {
-    console.error('Failed to fetch popular meals', err);
-    setMeals(mockMeals);
-  } finally {
-    setLoading(false);
-  }
-};
+  // fetchRandomMeals ();
+// useEffect(() => {
+//   const fetchRandomMeals = async () => {
+//     try {
+//       const res = await api.get('spoonacular/recipes/random');
+//       if (res.data.recipes) {
+//       setMeals(res.data.recipes);
+//       } else {
+//         console.warn('No random recipes fonud in response', res.data);
+//         setMeals([]);
+//       }
+//     } catch (err) {
+//       console.error('Failed to fetch random meals', err);
+//       setMeals(mockMeals);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-const handleMore = async () => {
-  setLoading(true);
-  try {
-    if (searchTerm) {
-      const newOffset = offset + 6;
-      // setOffset(newOffset);
-      const res = await api.get(`spoonacular/recipes?q=${searchTerm}&offset=${newOffset}`);
-      setOffset(newOffset);
-      // setMeals(res.data.results);
-      setMeals((prev) => [...prev, ...res.data.results]);
-    } else {
-      const res = await api.get('spoonacular/recipes/random');
-      setMeals(res.data.recipes);
-    }
-  } catch (err) {
-    console.error('Failed to load more meals', err);
-    setMeals(mockMeals);
-  } finally {
-    setLoading(false);
-  }
-};
-
-const handleBack = async () => {
-  if (searchTerm && offset >= 6) {
-    const newOffset = offset - 6;
-    setOffset(newOffset);
-    setLoading(true);
-    try {
-      const res = await api.get(`spoonacular/recipes?q=${searchTerm}&offset=${newOffset}`);
-      setMeals(res.data.results);
-    } catch (err) {
-      console.error('Failed to go back in results', err);
-    } finally {
-      setLoading(false);
-    }
-  }
-};
-
-
-useEffect(() => {
-  const fetchRandomMeals = async () => {
-    try {
-      const res = await api.get('spoonacular/recipes/random');
-      if (res.data.recipes) {
-      setMeals(res.data.recipes);
-      } else {
-        console.warn('No random recipes fonud in response', res.data);
-        setMeals([]);
-      }
-    } catch (err) {
-      console.error('Failed to fetch random meals', err);
-      setMeals(mockMeals);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchRandomMeals();
-}, []);
+//   fetchRandomMeals();
+// }, []);
 
   return (
     <div className="homepage">
@@ -176,3 +120,70 @@ useEffect(() => {
 };
 
 export default HomePage;
+
+// const handleSearch = async (query: string) => {
+  //   setSearchTerm(query);
+  //   setOffset(0);
+  //   setLoading(true);
+  //   try {
+  //     const res = await api.get(`spoonacular/recipes?q=${query}&offset=0`);
+  //     setMeals(res.data.results);
+  //   } catch (err) {
+  //     console.error('Search failed, using mock data:', err);
+  //     setMeals(mockMeals);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+//   const handleClear = async () => {
+//   setSearchTerm('');
+//   setLoading(true);
+//   try {
+//     const res = await api.get('/meals/popular');
+//     setMeals(res.data);
+//   } catch (err) {
+//     console.error('Failed to fetch popular meals', err);
+//     setMeals(mockMeals);
+//   } finally {
+//     setLoading(false);
+//   }
+// };
+
+// const handleMore = async () => {
+//   setLoading(true);
+//   try {
+//     if (searchTerm) {
+//       const newOffset = offset + 6;
+//       // setOffset(newOffset);
+//       const res = await api.get(`spoonacular/recipes?q=${searchTerm}&offset=${newOffset}`);
+//       setOffset(newOffset);
+//       // setMeals(res.data.results);
+//       setMeals((prev) => [...prev, ...res.data.results]);
+//     } else {
+//       const res = await api.get('spoonacular/recipes/random');
+//       setMeals(res.data.recipes);
+//     }
+//   } catch (err) {
+//     console.error('Failed to load more meals', err);
+//     setMeals(mockMeals);
+//   } finally {
+//     setLoading(false);
+//   }
+// };
+
+// const handleBack = async () => {
+//   if (searchTerm && offset >= 6) {
+//     const newOffset = offset - 6;
+//     setOffset(newOffset);
+//     setLoading(true);
+//     try {
+//       const res = await api.get(`spoonacular/recipes?q=${searchTerm}&offset=${newOffset}`);
+//       setMeals(res.data.results);
+//     } catch (err) {
+//       console.error('Failed to go back in results', err);
+//     } finally {
+//       setLoading(false);
+//     }
+//   }
+// };

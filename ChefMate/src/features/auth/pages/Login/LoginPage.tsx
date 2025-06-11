@@ -6,7 +6,7 @@ import React from "react";
 import api from "../../../../api/axios";
 import { useAuth } from "../../../../context/AuthContext";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import '../../components/Buttons.css'
+import '../../../../styles/Buttons.css';
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 

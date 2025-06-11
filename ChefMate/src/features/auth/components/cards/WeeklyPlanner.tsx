@@ -1,16 +1,11 @@
 import React from 'react';
 import { MealPlan, MealSlot } from '../../../../context/MealPlanContext';
 import { Link } from 'react-router-dom';
-
+import styles from './WeeklyPlanner.module.css';
+import './WeeklyPlanner.css';
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const meals = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
-
-// type MealPlan = {
-//   [day: string]: {
-//     [meal: string]: string[];
-//   };
-// };
 
 type WeeklyPlannerProps = {
   mealPlan: MealPlan;
@@ -34,10 +29,10 @@ const WeeklyPlanner: React.FC<WeeklyPlannerProps> = ({ mealPlan }) => {
                         <img
                           src={mealSlot.image}
                           alt={mealSlot.name}
-                          style={{ width: '30px', height: '30px', marginRight: '8px' }}
+                          className={styles.image}
                         />
                       )}
-                      {mealSlot.name}
+                      <span className="meal-name">{mealSlot.name}</span>
                       </Link>
                     </li>
                   ))
