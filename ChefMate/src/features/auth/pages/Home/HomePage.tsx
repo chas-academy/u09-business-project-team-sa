@@ -31,7 +31,11 @@ const HomePage = () => {
 
   const handleLogout = () => {
     logout();         // Clear the user
+    // setUser(null);
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     navigate('/login'); // Redirect to login
+
   };
 
   const handleViewProfile = () => {
