@@ -1,8 +1,8 @@
 # 👨‍🍳 ChefMate
 
-**ChefMate** is a full-stack recipe planning app that lets users sign up, log in, and manage their meal plans across a weekly calendar. 
+**ChefMate** is a full-stack recipe planning app that lets users sign up, log in, and manage their meal plans across a weekly calendar.
 
-Built with the MEAN stack, it combines a robust backend with an interactive frontend UI.
+Built with the MERN stack, it combines a robust backend with an interactive frontend UI.
 
 ---
 
@@ -19,11 +19,13 @@ Built with the MEAN stack, it combines a robust backend with an interactive fron
 ## 🛠️ Tech Stack
 
 **Frontend:**
-- Angular + TypeScript
+
+- React + TypeScript
 - Axios for HTTP requests
 - CSS Modules
 
 **Backend:**
+
 - Node.js + Express
 - MongoDB + Mongoose
 - JWT + bcrypt for secure auth
