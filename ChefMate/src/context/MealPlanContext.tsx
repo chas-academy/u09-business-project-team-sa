@@ -41,7 +41,7 @@ export const MealPlanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   if (!token) return;
 
   try {
-    const res = await api.get('/mealplan', {
+    const res = await api.get('/api/mealplan', {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -123,7 +123,7 @@ export const MealPlanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       },
     };
 
-    api.post('/mealplan', { plan: singleSlotUpdate }, {
+    api.post('api/mealplan', { plan: singleSlotUpdate }, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
