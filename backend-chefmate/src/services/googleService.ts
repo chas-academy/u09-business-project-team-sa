@@ -5,7 +5,11 @@ import session from "express-session";
 import cors from "cors";
 import { Mongoose } from "mongoose";
 
+require("dotenv").config();
 
+const clientID =
+  "805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleusercontent.com";
+const clientSecret = "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";
 
 passport.use(
   new GoogleStrategy(
