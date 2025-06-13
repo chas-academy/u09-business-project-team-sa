@@ -1,19 +1,21 @@
-import { useEffect, useState } from "react";
-import "./App.css";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+// import TestFetch from '../shared/components/TestFetch'
+// import reactLogo from '/src/assets/react.svg'
+// import viteLogo from '/vite.svg'
+import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
-import LoginPage from "../features/auth/pages/Login/LoginPage";
-import SignupPage from "../features/auth/pages/Signup/SignupPage";
-import HomePage from "../features/auth/pages/Home/HomePage";
-import WelcomePage from "../features/auth/pages/Welcome/WelcomePage";
-import ProtectedRoute from "../features/auth/components/ProtectedRoute";
-import MealCard from "../features/auth/components/cards/MealCard";
-import ProfilePage from "../features/auth/pages/Profile/ProfilePage";
+import { MealPlanProvider } from '../context/MealPlanContext'
+import { HomeProvider } from '../context/HomeContext'
+
+import './App.css'
+import LoginPage from '../features/auth/pages/Login/LoginPage'
+import SignupPage from '../features/auth/pages/Signup/SignupPage'
+import HomePage from '../features/auth/pages/Home/HomePage'
+import WelcomePage from '../features/auth/pages/Welcome/WelcomePage'
+import ProtectedRoute from '../features/auth/components/ProtectedRoute'
+import MealCard from '../features/auth/components/cards/MealCard'
+import ProfilePage from '../features/auth/pages/Profile/ProfilePage'
 
 function App() {
   const [user, setUser] = useState<any>(null);
@@ -46,6 +48,8 @@ function App() {
   };
 
   return (
+  <HomeProvider>
+  <MealPlanProvider>
     <Router>
       <div className="app-header">
         <h1>Login</h1>
@@ -80,13 +84,17 @@ function App() {
         />
         <Route path="/profile" element={<ProfilePage />} />
 
-        {/* API Route */}
-        <Route path="/spoonacular/recipes/:id" element={<MealCard />} />
-
-        {/* Catch-all */}
+        {/* api routes */}
+        <Route path="spoonacular/recipes/:id" element={<MealCard />} />
+        <Route path="/meal/:id" element={<MealCard />} />
+        
+        {/* Redirect any unknown route to WelcomePage */}
         <Route path="*" element={<Navigate to="/" />} />
+        
       </Routes>
     </Router>
+  </MealPlanProvider>
+  </HomeProvider>
   );
 }
 

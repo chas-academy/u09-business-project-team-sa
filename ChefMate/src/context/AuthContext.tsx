@@ -19,12 +19,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // const login = (user: User) => setUser(user);
   // const logout = () => setUser(null);
 
+  // useEffect(() => {
+  //   const storedUser = localStorage.getItem('user');
+  //   if (storedUser) {
+  //     setUser(JSON.parse(storedUser));
+  //   }
+  // }, []);
   useEffect(() => {
+  try {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      if (parsedUser?.username && parsedUser?.email) {
+        setUser(parsedUser);
+      } else {
+        localStorage.removeItem('user');
+      }
     }
-  }, []);
+  } catch (error) {
+    console.error('Invalid user data in localStorage', error);
+    localStorage.removeItem('user');
+  }
+}, []);
 
   const login = (user: User) => {
     setUser(user);

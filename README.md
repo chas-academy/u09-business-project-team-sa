@@ -1,51 +1,174 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/N68_urbh)
+# 👨‍🍳 ChefMate
 
-backend installs
+**ChefMate** is a full-stack recipe planning app that lets users sign up, log in, and manage their meal plans across a weekly calendar.
 
-npm init -y
-npm install express cors dotenv mongoose
-npm install --save-dev nodemon
-npm i --save-dev @types/node
-npm install --save-dev @types/express
-npm install --save-dev @types/express @types/cors
-npm install --save-dev @types/react @types/react-dom
-npm install --save-dev ts-node typescript @types/node nodemon
-npm install --save-dev typescript
-npm install mongoose
-npm install axios dotenv
-npx tsc --init //for the tsconfig.sjon
-npm install bcrypt
-npm i --save-dev @types/bcrypt
------
-For Google oAuth: 
-npm install @react-oauth/google
-npm install jwt-decode
-npm install google-auth-library
-npm install react-router-dom
------
+Built with the MERN stack, it combines a robust backend with an interactive frontend UI.
+
+---
+
+## 🚀 Features
+
+- 🔐 User authentication (Signup & Login)
+- 🗓️ Weekly meal planner (Breakfast, Lunch, Dinner, Snacks)
+- 📦 MongoDB for storing user data and plans
+- 🔒 JWT-based session management
+- 🌍 Deployed backend (Render) and frontend (Netlify)
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend:**
+
+- React + TypeScript
+- Axios for HTTP requests
+- CSS Modules
+
+**Backend:**
+
+- Node.js + Express
+- MongoDB + Mongoose
+- JWT + bcrypt for secure auth
+- dotenv for environment management
+
+---
+
+## 📂 Project Structure
+
+| 📂 backend service  |     |              |                            |
+|---------------------|-----|--------------|----------------------------|
+| backend-chefmate/   |     |              |                            |
+|                     |src/ |              |                            |
+|                     |     | controllers/ |                            |
+|                     |     |              | userController.ts          |
+|                     |     |              | userMealPlanController.ts  |
+|                     |     | db/          |                            |
+|                     |     |              | db.ts                      |
+|                     |     | middleware/  |                            |
+|                     |     |              | auth.ts                    |
+|                     |     | models/      |                            |
+|                     |     |              | userMealPlans.ts           |
+|                     |     |              | userModel.ts               |
+|                     |     | routes/      |                            |
+|                     |     |              | authRoutes.ts              |
+|                     |     |              | spoonacularRoutes.ts       |
+|                     |     |              | userMealPlanRoutes.ts      |
+|                     |     |              | userRoutes.ts              |
+|                     |     | services/    |                            |
+|                     |     |              | googleService.ts           |
+|                     |     |              | spponacular.ts             |
+| app.ts              |                    |
+
+| 📂 frontend service |       |             |                     |             |
+|---------------------|-------|-------------|---------------------|-------------|
+| ChefMate/           |       |             |                     |             |
+|                     | src/  |             |                     |             |
+|                     |       | api/        |                     |             |
+|                     |       |             | axios.ts            |             |
+|                     |       | app/        |                     |             |
+|                     |       |             | app.tsx             |             |
+|                     |       | assets/     |                     |             |
+|                     |       | context/    |                     |             |
+|                     |       |             | AuthContext.tsx     |             |
+|                     |       |             | MealPlanContext.tsx |             |
+|                     |       | features/   |                     |             |
+|                     |       |             | components/         |             |
+|                     |       |             |                     | cards/      |
+|                     |       |             |                     | forms/      |
+|                     |       |             | pages/              |             |
+|                     |       |             | styles/             |             |
+|                     |       |             |                     | index.css   |
+|                     |       |             |                     | buttons.css |
+|                     |       | main.tsx    |                     |             |
+
+## 🌐 Live URLs
+
+- **Frontend**: [https://chef-mate.netlify.app](https://chef-mate.netlify.app)
+- **Backend**: [https://chefmate-backend-server.onrender.com](https://chefmate-backend-server.onrender.com)
 
 
-added this under scripts
-    "start": "node app.ts",
-    "dev": "nodemon app.ts",
-made app.ts file
+## 🧪 Local Setup
 
-make your .env file with this - Backend
+### 1. Clone the repo
 
-MONGO_URI_PROD=mongodb+srv://username:password@YOURcluster.kcotv.mongodb.net/ChefMate?retryWrites=true&w=majority&appName=YourCluster
-PORT=5000
-MONGO_URI_LOCAL=mongodb://localhost:27017/ChefMate
-NODE_ENV=dev
-SESSION_SECRET=your secretkey
-SPOONACULAR_API_KEY=log in and get your own api key
-GOOGLE_CLIENT_ID=805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleusercontent.com
+git clone https://github.com/chas-academy/u09-business-project-team-sa.git
 
-frontend installs
+### 2. Install dependencies
 
-create a .env file in frontend as well with this
-VITE_GOOGLE_CLIENT_ID=805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleusercontent.com
+Frontend
 
+- cd cbackend-chefmate
+- npm install
 
-npm install axios
-npm install react-router-dom
-npm install --save-dev @types/react-router-dom
+Backend
+
+- cd ChefMate
+- npm install
+
+### 3. Setup environment variables
+
+Create a .env file in the backend server:
+
+- MONGO_URI=your-mongodb-connection-string
+- JWT_SECRET=your-secret-key
+- SPOONACULAR_API_KEY=your-secret-key
+- GOOGLE_CLIENT_ID=your-key
+- PORT=5000
+
+Create a .env file in the frontend server:
+
+- VITE-GOOGLE_CLIENT_ID=your-key
+- VITE_API_BASE_URL=`http://localhost:5000/api`
+
+### 4. Run the project locally
+
+Backend
+
+- cd backend-chefmate
+- npm run dev
+
+Frontend
+
+- cd ChefMate
+- npm run dev
+
+Now go to http://localhost:5173
+
+📬 API Endpoints
+
+- POST /api/users/signup
+- POST /api/users/login
+- POST /api/mealplan
+- GET /api/mealplan
+
+<!-- Body:
+
+json
+
+{
+  "username": "yourName",
+
+  "email": "you@example.com",
+
+  "password": "yourPassword"
+}
+
+- POST /api/users/login
+
+Body:
+
+json
+
+{
+  "email": "you@example.com",
+  "password": "yourPassword"
+} -->
+
+# Future Features
+
+- Calorie tracking for day and week
+- Favorite meal card added to profile page showing past saved meals for an easy finding
+
+# 🙌 Author
+
+## Made with ❤️ by Sue and Alex

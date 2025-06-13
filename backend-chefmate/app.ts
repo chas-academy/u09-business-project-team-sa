@@ -3,6 +3,9 @@ import cors, { CorsOptionsDelegate } from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./src/database/db";
 import userRoutes from "./src/routes/userRoutes";
+import spoonacularRoutes from "./src/routes/spoonacularRoutes"; // <-- note the name
+import authRoute from "./src/routes/authRoute";
+import userMealPlanRoutes from "./src/routes/userMealPlanRoutes";
 import spoonacularRoutes from "./src/routes/spoonacularRoutes";
 
 dotenv.config();
@@ -10,8 +13,8 @@ connectDB();
 
 const app: Express = express();
 
-const corsOptions: CorsOptionsDelegate = (req, callback) => {
-  const allowedOrigins = [
+const corsOptions = {
+  origin: [
     "http://localhost:5173",
     "https://chef-mate.netlify.app",
   ];
@@ -40,6 +43,8 @@ app.use(express.urlencoded({ extended: true }));
 // Mount routes
 app.use("/api/users", userRoutes);
 app.use("/api/spoonacular", spoonacularRoutes);
+app.use("/api/auth", authRoute);
+app.use("/api/mealplan", userMealPlanRoutes);
 
 // Base route
 app.get("/", (req: Request, res: Response) => {

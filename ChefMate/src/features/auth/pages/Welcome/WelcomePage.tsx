@@ -19,8 +19,8 @@ const WelcomePage = () => {
 
         <ul className="welcome-list">
             <li>CREATE WEEKLY MEALPLANS.</li>
-            <li>CREATE YOUR OWN RECEPIES BY ADDING INGRIDIENTS.</li>
-            <li>ADD / SAVE OR EDIT RECEPIES.</li>
+            <li>CREATE YOUR OWN MEALS.</li>
+            <li>ADD / SAVE OR EDIT RECIPES.</li>
         </ul>
 
         <h2>And many more features!</h2>
@@ -28,7 +28,6 @@ const WelcomePage = () => {
         <img src={MealPrep} alt="Meal prep" className="welcome-banner" />
 
         <button onClick={goBackToLogin} className="signup-switch-button">
-          {/* Already have an account? Log in */}
            Get started here!
         </button>
       </div>

@@ -7,11 +7,16 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import ChefMateLogo from '../../../../assets/Chefmate_LOGO.png'
 import { useEffect, useState } from 'react';
 import api from '../../../../api/axios';
-import '../../components/Buttons.css';
+import '../../../../styles/Buttons.css';
+import mockMeals from '../../../../mocks/mockMeals';
+// import { handleSearch, handleBack, handleClear, handleMore } from '../../../../context/HomeContext';
+import { useHome } from '../../../../context/HomeContext';
 
 type Meal = {
   id: string;
-  title: string;
+  title?: string;
+  name?: string;
+  image?: string;
 };
 
 const HomePage = () => {
@@ -19,14 +24,18 @@ const HomePage = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const [meals, setMeals] = useState<Meal[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const [searchTerm, setSearchTerm] = useState('');
+  const {
+  meals, loading, searchTerm, offset,
+  handleSearch, handleClear, handleMore, handleBack
+} = useHome();
 
   const handleLogout = () => {
     logout();         // Clear the user
+    // setUser(null);
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     navigate('/login'); // Redirect to login
+
   };
 
   const handleViewProfile = () => {
@@ -36,53 +45,6 @@ const HomePage = () => {
   const handleSaveMeal = (mealId: string) => {
   console.log(`Meal ${mealId} saved!`);
   };
-
-  const handleSearch = async (query: string) => {
-    setSearchTerm(query);
-    setLoading(true);
-    try {
-      const res = await api.get(`spoonacular/recipes?q=${query}`);
-      setMeals(res.data.results);
-    } catch (err) {
-      console.error('Search failed:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleClear = async () => {
-  setSearchTerm('');
-  setLoading(true);
-  try {
-    const res = await api.get('/meals/popular');
-    setMeals(res.data);
-  } catch (err) {
-    console.error('Failed to fetch popular meals', err);
-  } finally {
-    setLoading(false);
-  }
-};
-
-useEffect(() => {
-  const fetchRandomMeals = async () => {
-    try {
-      const res = await api.get('spoonacular/recipes/random');
-      if (res.data.recipes) {
-      setMeals(res.data.recipes);
-      } else {
-        console.warn('No random recipes fonud in response', res.data);
-        setMeals([]);
-      }
-    } catch (err) {
-      console.error('Failed to fetch random meals', err);
-      setMeals([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchRandomMeals();
-}, []);
 
   return (
     <div className="homepage">
@@ -105,9 +67,20 @@ useEffect(() => {
       ) : (
         <div>
           <RecipeCard
-            title={searchTerm ? `${searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1)} Meals` : 'Popular Meals'}
-            meals={meals.map((m) => ({ id: m.id.toString(), name: m.title }))}
+            title={searchTerm ? `${searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1)} 
+              Meals` : 'Popular Meals'}
+
+            meals={meals.map((m) => ({ 
+              id: m.id.toString(), 
+              name: m.title ?? m.name ?? 'Untitled Meal',
+              image: m.image,
+            }))}
+
             onSave={handleSaveMeal}
+            onMore={handleMore}
+            onBack={handleBack}
+            searchTerm={searchTerm}
+            offset={offset}
           />
         </div>
       )}

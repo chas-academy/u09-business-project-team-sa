@@ -5,7 +5,8 @@ import ChefMateLogo from "../../../../assets/Chefmate_LOGO.png";
 import React from "react";
 import api from "../../../../api/axios";
 import { useAuth } from "../../../../context/AuthContext";
-import '../../components/Buttons.css'
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import '../../../../styles/Buttons.css';
 
 
 
@@ -16,14 +17,36 @@ const LoginPage = () => {
   const handleLogin = async (email: string, password: string) => {
     try {
       const res = await api.post("/users/login", { email, password });
-      login(res.data.user); // Save user in context
+      const { token, user } = res.data;
+
+      // Save token to localStorage or context
+      localStorage.setItem("token", token); // or store in AuthContext
+
+      login(user); // Save user info
       navigate("/home");
     } catch (err) {
       console.error("Login failed", err);
       alert("Invalid credentials");
     }
   };
-
+  
+  const handleGoogleSuccess = async (credentialResponse: {
+    credential?: string;
+  }) => {
+    if (credentialResponse.credential) {
+      try {
+        // Send Google token to backend for verification and login/signup
+        const res = await api.post("/auth/google-login", {
+          token: credentialResponse.credential,
+        });
+        login(res.data.user); // Save user info in context (adjust to your backend response)
+        navigate("/home");
+      } catch (error) {
+        console.error("Google login failed", error);
+        alert("Google login failed");
+      }
+    }
+  };
 
 
 

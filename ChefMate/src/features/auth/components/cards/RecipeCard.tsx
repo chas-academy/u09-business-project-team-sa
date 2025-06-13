@@ -8,15 +8,20 @@ import { Link } from 'react-router-dom';
 type Meal = {
   id: string;
   name: string;
+  image?: string;
 };
 
 type RecipeCardProps = {
   title: string;
   meals: Meal[];
   onSave: (mealId: string) => void;
+  onMore: () => void;
+  onBack: () => void;
+  searchTerm: string;
+  offset: number;
 };
 
-const RecipeCard = ({ title, meals, onSave }: RecipeCardProps) => {
+const RecipeCard = ({ title, meals, onMore, onBack, searchTerm, offset }: RecipeCardProps) => {
   const navigate = useNavigate();
 
   return (
@@ -27,17 +32,27 @@ const RecipeCard = ({ title, meals, onSave }: RecipeCardProps) => {
         {meals.map((meal) => (
           <div key={meal.id} className="meal-card">
             <h3>{meal.name}</h3>
-            <button onClick={() => onSave(meal.id)}>Save</button>
+          {meal.image && (
+            <img
+              src={meal.image}
+              alt={meal.name}
+              className='meal-image'
+            />
+          )}
 
-            {/* <Link to={`spoonacular/meals/${meal.id}`}>
-            <button>View</button>
-            </Link> */}
+            {/* <button onClick={() => onSave(meal.id)}>Save</button> */}
             <button onClick={() => navigate(`/spoonacular/recipes/${meal.id}`)}>View</button>
-
           </div>
         ))}
-
       </div>
+
+      <div className="card-controls">
+        {searchTerm && offset > 0 && (
+        <button onClick={onBack} className='back-button'>Back</button>
+        )}
+        <button onClick={onMore} className='more-button'>More</button>
+      </div>
+
     </div>
   );
 };
