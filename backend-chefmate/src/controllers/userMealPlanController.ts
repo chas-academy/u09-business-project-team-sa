@@ -30,6 +30,21 @@ const normalizeIncomingPlan = (plan: any) => {
   return normalizedPlan;
 };
 
+type Day = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
+    type MealType = 'Breakfast' | 'Lunch' | 'Dinner' | 'Snacks';
+
+    interface Meal {
+      id: string;
+      name: string;
+      image?: string;
+    }
+
+    type MealPlanStructure = {
+      [day in Day]: {
+        [mealType in MealType]: Meal[];
+      };
+    };
+
 
 // Default meal plan template
 export const generateDefaultMealPlan = () => {
@@ -145,3 +160,85 @@ const normalizedPlan: any = {};
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// remove meal from meal plan on user
+export const removeMealFromPlan = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  const { day, mealType, mealId } = req.body;
+
+  if (!req.user?._id) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  try {
+    const mealPlanDoc = await MealPlan.findOne({ userId: req.user._id });
+
+    if (!mealPlanDoc) {
+      res.status(404).json({ error: "Meal plan not found" });
+      return;
+    }
+
+    // Ensure day and mealType exist
+    if (!mealPlanDoc.plan?.[day] || !Array.isArray(mealPlanDoc.plan[day][mealType])) {
+      res.status(400).json({ error: "Invalid day or meal type" });
+      return;
+    }
+
+    // Filter out the meal with the given ID
+    mealPlanDoc.plan[day][mealType] = mealPlanDoc.plan[day][mealType].filter(
+      (meal: { id: string }) => meal.id !== mealId
+    );
+
+    await mealPlanDoc.save();
+
+    res.status(200).json({ message: "Meal removed from plan" });
+  } catch (err) {
+    console.error("Error removing meal from plan:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// export const removeMealFromPlan = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+//   const { day, mealType, mealId } = req.body;
+
+  
+//     if (!req.user?._id) {
+//       res.status(401).json({ error: "Unauthorized" });
+//       return;
+//     }
+
+//     try {
+//     const mealPlanDoc = await MealPlan.findOne({ userId: req.user._id });
+
+//     if (!mealPlanDoc || !mealPlanDoc.plan || !mealPlanDoc.plan[day]) {
+//       res.status(404).json({ error: "Meal plan not found or invalid" });
+//       return;
+//     }
+
+//     const plan = mealPlanDoc.plan as MealPlanStructure;
+
+//     const meals = plan[day][mealType];
+//     // const meals = mealPlanDoc.plan[day][mealType];
+
+//      if (!Array.isArray(plan[day as Day][mealType as MealType])) {
+//       res.status(400).json({ error: "Invalid day or meal type" });
+//       return;
+//     }
+
+//     plan[day as Day][mealType as MealType] = plan[day as Day][mealType as MealType].filter(
+//       (meal: Meal) => meal.id !== mealId
+//     );
+//     // if (!Array.isArray(meals)) {
+//     //   res.status(400).json({ error: "Invalid day or meal type" });
+//     //   return;
+//     // }
+
+//     // mealPlanDoc.plan[day][mealType] = meals.filter((meal: any) => meal.id !== mealId);
+//     await mealPlanDoc.save();
+
+//     res.status(200).json({ message: "Meal removed" });
+//   } catch (err) {
+//     console.error("Error removing meal:", err);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };

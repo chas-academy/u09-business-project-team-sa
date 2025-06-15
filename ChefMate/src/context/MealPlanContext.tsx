@@ -27,10 +27,13 @@ const defaultMealPlan: MealPlan = daysOfWeek.reduce((acc, day) => {
 const MealPlanContext = createContext<{
   mealPlan: MealPlan;
   addMealToPlan: (day: string, mealType: string, meal: MealSlot) => void;
-} & { fetchMealPlan: () => void }>({
+} & { fetchMealPlan: () => void;
+  removeMealFromPlan: (day: string, mealType: string, mealId: string) => void;
+}>({
   mealPlan: defaultMealPlan,
   addMealToPlan: () => {},
   fetchMealPlan() {},
+  removeMealFromPlan: () => {},
 });
 
 export const MealPlanProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -137,8 +140,26 @@ export const MealPlanProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   });
 };
 
+const removeMealFromPlan = async (day: string, mealType: string, mealId: string) => {
+  const normalizedType = normalizeMealType(mealType);
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  setMealPlan((prev) => {
+    const updated = { ...prev };
+    updated[day][normalizedType] = updated[day][normalizedType].filter((m) => m.id !== mealId);
+
+    api.delete("/mealplan/remove", {
+      headers: { Authorization: `Bearer ${token}` },
+      data: { day, mealType: normalizedType, mealId },
+    }).catch((err) => console.error("Error removing meal:", err));
+
+    return updated;
+  });
+};
+
   return (
-    <MealPlanContext.Provider value={{ mealPlan, addMealToPlan, fetchMealPlan }}>
+    <MealPlanContext.Provider value={{ mealPlan, addMealToPlan, fetchMealPlan , removeMealFromPlan }}>
       {children}
     </MealPlanContext.Provider>
   );

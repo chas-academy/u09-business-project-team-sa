@@ -1,5 +1,5 @@
 import React from 'react';
-import { MealPlan, MealSlot } from '../../../../context/MealPlanContext';
+import { useMealPlan, MealPlan, MealSlot } from '../../../../context/MealPlanContext';
 import { Link } from 'react-router-dom';
 import styles from './WeeklyPlanner.module.css';
 import './WeeklyPlanner.css';
@@ -12,6 +12,8 @@ type WeeklyPlannerProps = {
 };
 
 const WeeklyPlanner: React.FC<WeeklyPlannerProps> = ({ mealPlan }) => {
+  const { removeMealFromPlan } = useMealPlan();
+
   return (
     <div className="calendar">
       {daysOfWeek.map((day) => (
@@ -34,6 +36,13 @@ const WeeklyPlanner: React.FC<WeeklyPlannerProps> = ({ mealPlan }) => {
                       )}
                       <span className="meal-name">{mealSlot.name}</span>
                       </Link>
+                      {/* remove meal button */}
+                      <button
+                        onClick={() => removeMealFromPlan(day, meal, mealSlot.id)}
+                        className="remove-button"
+                      >
+                        ✕
+                      </button>
                     </li>
                   ))
                 ) : (
