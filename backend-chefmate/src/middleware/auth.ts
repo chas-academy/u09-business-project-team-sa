@@ -5,11 +5,6 @@ interface AuthenticatedRequest extends Request {
   user?: { _id: string };
 }
 
-// export const authMiddleware = (
-//     req: AuthenticatedRequest, 
-//     res: Response, 
-//     next: NextFunction
-// ):void
 export const authMiddleware: RequestHandler = (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
   
