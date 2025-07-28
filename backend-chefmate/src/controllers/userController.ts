@@ -47,7 +47,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    if (!user.password) {
+    res.status(400).json({ message: "Password not set for this user." });
+    return;
+  }
     const valid = await bcrypt.compare(password, user.password);
+
     if (!valid) {
       res.status(401).json({ message: "Invalid credentials" });
       return;

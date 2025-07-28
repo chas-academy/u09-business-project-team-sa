@@ -16,15 +16,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  // const login = (user: User) => setUser(user);
-  // const logout = () => setUser(null);
-
-  // useEffect(() => {
-  //   const storedUser = localStorage.getItem('user');
-  //   if (storedUser) {
-  //     setUser(JSON.parse(storedUser));
-  //   }
-  // }, []);
   useEffect(() => {
   try {
     const storedUser = localStorage.getItem('user');

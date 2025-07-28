@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import MealPlan from "../models/userMealPlans";
 import { AuthenticatedRequest } from '../middleware/auth';
+import mongoose from "mongoose";
 
 // Normalize a single meal
 const normalizeMeal = (meal: any) => ({
@@ -81,25 +82,30 @@ export const saveMealPlan = async (req: AuthenticatedRequest, res: Response): Pr
     console.log("User ID:", req.user?._id);
     console.log("Plan received:", JSON.stringify(req.body.plan, null, 2));
 
-    // if (!req.user?._id) return res.status(401).json({ error: "Unauthorized" });
-    // const incoming = req.body.plan;
-    const incoming = normalizeIncomingPlan(req.body.plan);
-    const existing = await MealPlan.findOne({ userId: req.user!._id });
+    const userId = new mongoose.Types.ObjectId(req.user!._id); 
+
+    const incoming = normalizeIncomingPlan(plan);
+    const existing = await MealPlan.findOne({ userId });
+    // const incoming = normalizeIncomingPlan(req.body.plan);
+    // const existing = await MealPlan.findOne({ userId: req.user!._id });
     
     if (existing) {
       existing.plan = deepMergeMealPlan(existing.plan, incoming);
       console.log("Before save, merged plan:", JSON.stringify(existing.plan, null, 2));
       await existing.save();
       console.log("Updated meal plan in DB");
+      console.log("Authenticated user ID:", req.user?._id);
       } else {
       const newPlan = deepMergeMealPlan({}, incoming);
       console.log("Before save, merged plan:", JSON.stringify(newPlan, null, 2));
 
       await MealPlan.create({
-        userId: req.user!._id,
+        // userId: req.user!._id,
+        userId,
         plan: newPlan,
       });
       console.log("Created new meal plan in DB");
+      console.log("MealPlan.create was called successfully");
       }
     
     res.status(200).json({ message: "Meal plan saved!" });
@@ -112,7 +118,10 @@ export const saveMealPlan = async (req: AuthenticatedRequest, res: Response): Pr
 // get meal plan
   export const getMealPlan = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const planDoc = await MealPlan.findOne({ userId: req.user!._id });
+    const userId = new mongoose.Types.ObjectId(req.user!._id); // ✅ Ensure it's an ObjectId
+
+    const planDoc = await MealPlan.findOne({ userId });
+    // const planDoc = await MealPlan.findOne({ userId: req.user!._id });
 
     if (!planDoc) {
       res.status(200).json({}); // No plan yet

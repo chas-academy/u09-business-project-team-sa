@@ -16,12 +16,30 @@ export const authMiddleware: RequestHandler = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
-    (req as AuthenticatedRequest).user = { _id: decoded.id };
-    next();
-  } catch (err) {
-    res.status(401).json({ message: 'Token is not valid' });
+  const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+  console.log('🔍 Decoded JWT payload:', decoded);
+
+  const userId = (decoded as any).id || (decoded as any)._id || (decoded as any).sub;
+
+  if (!userId) {
+    res.status(401).json({ message: 'Token is missing user ID' });
+    return;
   }
+
+  (req as AuthenticatedRequest).user = { _id: userId };
+  next();
+} catch (err) {
+  console.error("❌ JWT verification failed:", err);
+  res.status(401).json({ message: 'Token is not valid' });
+}
 };
 
 export type { AuthenticatedRequest };
+
+  // try {
+  //   const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
+  //   (req as AuthenticatedRequest).user = { _id: decoded.id };
+  //   next();
+  // } catch (err) {
+  //   res.status(401).json({ message: 'Token is not valid' });
+  // }

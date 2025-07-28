@@ -39,7 +39,10 @@ router.post(
     res.status(200).json({
       message: "Google login successful",
       token: jwtToken,
-      user: { username: user.username, email: user.email },
+      user: { 
+        username: user.username, 
+        email: user.email 
+      },
     });
   } catch (error) {
     console.error("Google login error:", error);
