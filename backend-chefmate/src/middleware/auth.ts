@@ -3,7 +3,9 @@ import jwt from 'jsonwebtoken';
 
 interface AuthenticatedRequest extends Request {
   user?: { _id: string };
+  id: string;
 }
+
 
 // export const authMiddleware = (
 //     req: AuthenticatedRequest, 

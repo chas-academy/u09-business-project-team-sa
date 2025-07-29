@@ -1,14 +1,11 @@
+import React from "react";
 import "./LoginPage.css";
 import LoginForm from "../../components/forms/LoginForm";
 import { useNavigate } from "react-router-dom";
 import ChefMateLogo from "../../../../assets/Chefmate_LOGO.png";
-import React from "react";
 import api from "../../../../api/axios";
 import { useAuth } from "../../../../context/AuthContext";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import '../../../../styles/Buttons.css';
-
-
+import "../../../../styles/Buttons.css";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -19,40 +16,22 @@ const LoginPage = () => {
       const res = await api.post("/users/login", { email, password });
       const { token, user } = res.data;
 
-      // Save token to localStorage or context
-      localStorage.setItem("token", token); // or store in AuthContext
-
-      login(user); // Save user info
+      localStorage.setItem("token", token);
+      login(user);
       navigate("/home");
     } catch (err) {
       console.error("Login failed", err);
       alert("Invalid credentials");
     }
   };
-  
-  const handleGoogleSuccess = async (credentialResponse: {
-    credential?: string;
-  }) => {
-    if (credentialResponse.credential) {
-      try {
-        // Send Google token to backend for verification and login/signup
-        const res = await api.post("/auth/google-login", {
-          token: credentialResponse.credential,
-        });
-        login(res.data.user); // Save user info in context (adjust to your backend response)
-        navigate("/home");
-      } catch (error) {
-        console.error("Google login failed", error);
-        alert("Google login failed");
-      }
-    }
-  };
-
-
-
 
   const goToSignup = () => {
     navigate("/signup");
+  };
+
+  const loginWithGoogle = () => {
+    console.log("Login with Google clicked");
+    window.open("http://localhost:5000/auth/google", "_self");
   };
 
   return (
@@ -66,7 +45,9 @@ const LoginPage = () => {
         <LoginForm onLogin={handleLogin} />
 
         <p className="login-subtitle">Or sign in with Google</p>
-
+        <button onClick={loginWithGoogle} className="google-login-button">
+          Login with Google
+        </button>
 
         <p className="login-subtitle">
           New to ChefMate? <br />

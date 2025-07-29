@@ -1,11 +1,8 @@
-import express, { Express, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import session from "express-session";
 import cors from "cors";
-import { Mongoose } from "mongoose";
-
-require("dotenv").config();
+import jwt from "jsonwebtoken";
 
 const clientID =
   "805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleusercontent.com";
@@ -14,83 +11,78 @@ const clientSecret = "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";
 passport.use(
   new GoogleStrategy(
     {
-      clientID: clientID,
-      clientSecret: clientSecret,
+      clientID,
+      clientSecret,
       callbackURL: "http://localhost:5000/auth/google/callback",
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (_accessToken, _refreshToken, profile, done) => {
       try {
         return done(null, profile);
       } catch (err) {
-        return done(err, false);
+        return done(err as Error, false);
       }
     }
   )
 );
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser((user, done) => {
   done(null, user);
 });
-
-passport.deserializeUser(function (object, done) {
-  console.log(object);
-  done(null, object as Express.User);
+passport.deserializeUser((obj, done) => {
+  done(null, obj as Express.User);
 });
 
-const app: Express = express();
+const router = express.Router();
 
-const corsOptions = {
-  origin: "http://localhost:5173",
-  credentials: true,
-};
+router.use(passport.initialize());
 
-app.use(cors(corsOptions));
+// --- GOOGLE AUTH ROUTES ---
 
-// Handle preflight requests
-app.options("*", cors(corsOptions));
-
-app.use(
-  session({
-    secret: "verySecretySecret",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.get("/", (req: Request, res: Response) => {
-  res.send("Backend running!");
-});
-
-app.get(
+router.get(
   "/auth/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  })
+  passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-app.get(
+//  issue a JWT and send to frontend
+router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:5173",
-    successRedirect: "http://localhost:5173",
-  })
+    failureRedirect: "http://localhost:5173/login",
+    session: false,
+  }),
+  (req: Request, res: Response) => {
+    const user = req.user as any;
+
+    if (!user) {
+      console.log("❌ Ingen användare i callback");
+      return res.redirect("http://localhost:5173/login");
+    }
+
+    const payload = {
+      id: user.id,
+      name: user.displayName,
+      email: user.emails?.[0]?.value,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET!, {
+      expiresIn: "7d",
+    });
+
+    // Redirect to frontend with token as query parameter
+    
+    console.log("✅ Token skapad:", token);
+    res.redirect(`http://localhost:5173/oauth/callback?token=${token}`);
+  }
 );
 
-app.get("/auth/logout", (req: Request, res: Response, next) => {
-  req.logout((err) => {
-    if (err) return next(err);
-    res.sendStatus(200);
-  });
+//logout route
+router.get("/auth/logout", (_req: Request, res: Response) => {
+  res.sendStatus(200);
 });
 
-app.get("/auth/user", (req: Request, res: Response) => {
+// Return current user info
+router.get("/auth/user", (req: Request, res: Response) => {
   res.json(req.user || null);
 });
 
-const PORT = 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+export default router;
