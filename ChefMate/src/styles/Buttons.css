@@ -218,3 +218,20 @@
 .signup-button:hover {
   background-color: #dc2626;
 }
+
+.remove-button {
+  background-color: #f87171; /* light red */
+  color: white;
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.3s ease;
+}
+
+.remove-button:hover {
+  background-color: #dc2626; /* darker red on hover */
+}

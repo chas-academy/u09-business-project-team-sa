@@ -2,3 +2,22 @@
   font-size: 0.85rem;
   line-height: 1.2;
 }
+
+.meal-list-item {
+  list-style: none;
+  margin: 0.25rem 0;
+}
+
+.meal-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.meal-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  flex-grow: 1;
+}

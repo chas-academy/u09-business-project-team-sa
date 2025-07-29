@@ -3,6 +3,7 @@ import { useMealPlan, MealPlan, MealSlot } from '../../../../context/MealPlanCon
 import { Link } from 'react-router-dom';
 import styles from './WeeklyPlanner.module.css';
 import './WeeklyPlanner.css';
+import '../../../../styles/Buttons.css';
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const meals = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
@@ -25,24 +26,24 @@ const WeeklyPlanner: React.FC<WeeklyPlannerProps> = ({ mealPlan }) => {
               <ul>
                 {mealPlan[day] && mealPlan[day][meal]?.length > 0 ? (
                   mealPlan[day][meal].map((mealSlot: MealSlot, i: number) => (
-                    <li key={i}>
-                      <Link to={`/meal/${mealSlot.id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-                      {mealSlot.image && (
-                        <img
-                          src={mealSlot.image}
-                          alt={mealSlot.name}
-                          className={styles.image}
-                        />
-                      )}
-                      <span className="meal-name">{mealSlot.name}</span>
-                      </Link>
-                      {/* remove meal button */}
-                      <button
-                        onClick={() => removeMealFromPlan(day, meal, mealSlot.id)}
-                        className="remove-button"
-                      >
-                        ✕
-                      </button>
+                    <li key={i} className="meal-list-item">
+                      <div className="meal-content">
+                        <Link
+                          to={`/meal/${mealSlot.id}`}
+                          className="meal-link"
+                        >
+                          {mealSlot.image && (
+                            <img src={mealSlot.image} alt={mealSlot.name} className={styles.image} />
+                          )}
+                          <span className="meal-name">{mealSlot.name}</span>
+                        </Link>
+                        <button
+                          onClick={() => removeMealFromPlan(day, meal, mealSlot.id)}
+                          className="remove-button"
+                        >
+                          ✕
+                        </button>
+                      </div>
                     </li>
                   ))
                 ) : (
