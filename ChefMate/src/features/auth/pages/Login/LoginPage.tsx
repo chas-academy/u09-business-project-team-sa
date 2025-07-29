@@ -30,16 +30,17 @@ const LoginPage = () => {
     }
   };
   
-  const handleGoogleSuccess = async (credentialResponse: {
-    credential?: string;
-  }) => {
+  const handleGoogleSuccess = async (credentialResponse: { credential?: string; }) => {
     if (credentialResponse.credential) {
       try {
         // Send Google token to backend for verification and login/signup
         const res = await api.post("/auth/google-login", {
           token: credentialResponse.credential,
         });
-        login(res.data.user); // Save user info in context (adjust to your backend response)
+        localStorage.setItem("token", res.data.token); // save token!
+
+        login(res.data.user); // Save user info 
+
         navigate("/home");
       } catch (error) {
         console.error("Google login failed", error);
