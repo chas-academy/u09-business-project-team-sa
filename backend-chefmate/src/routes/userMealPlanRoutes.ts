@@ -22,5 +22,4 @@ router.post('/test', (req: Request, res: Response) => {
   res.send("Test route works!");
 });
 
-
 export default router;

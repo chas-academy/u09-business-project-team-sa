@@ -35,11 +35,3 @@ export const authMiddleware: RequestHandler = (req, res, next) => {
 };
 
 export type { AuthenticatedRequest };
-
-  // try {
-  //   const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
-  //   (req as AuthenticatedRequest).user = { _id: decoded.id };
-  //   next();
-  // } catch (err) {
-  //   res.status(401).json({ message: 'Token is not valid' });
-  // }

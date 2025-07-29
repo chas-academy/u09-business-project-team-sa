@@ -51,12 +51,3 @@ router.post(
 });
 
 export default router;
-
-    // try {
-    //   const user = await verifyGoogleToken(token);
-    //   res.status(200).json(user);
-    // } catch (error) {
-    //   res.status(401).json({ error: (error as Error).message });
-    // }
-//   }
-// );
