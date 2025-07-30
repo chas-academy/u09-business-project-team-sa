@@ -97,7 +97,7 @@ git clone https://github.com/chas-academy/u09-business-project-team-sa.git
 
 Frontend
 
-- cd cbackend-chefmate
+- cd backend-chefmate
 - npm install
 
 Backend
@@ -117,7 +117,7 @@ Create a .env file in the backend server:
 
 Create a .env file in the frontend server:
 
-- VITE-GOOGLE_CLIENT_ID=your-key
+- VITE_GOOGLE_CLIENT_ID=your-key
 - VITE_API_BASE_URL=`http://localhost:5000/api`
 
 ### 4. Run the project locally
@@ -140,6 +140,7 @@ Now go to http://localhost:5173
 - POST /api/users/login
 - POST /api/mealplan
 - GET /api/mealplan
+- DELETE /api/mealplan/remove
 
 <!-- Body:
 
