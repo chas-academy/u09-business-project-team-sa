@@ -3,6 +3,7 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import cors from "cors";
 import jwt from "jsonwebtoken";
+import { GoogleUser } from "../models/userModelGoogle"; 
 
 const clientID =
   "805405718661-8tba2pt2ham5sgfv4q8omvehddc9ujdd.apps.googleusercontent.com";
@@ -17,7 +18,20 @@ passport.use(
     },
     async (_accessToken, _refreshToken, profile, done) => {
       try {
-        return done(null, profile);
+        const existingUser = await GoogleUser.findOne({ googleId: profile.id });
+
+        if (existingUser) {
+          return done(null, existingUser);
+        }
+
+        const newUser = new GoogleUser({
+          googleId: profile.id,
+          name: profile.displayName,
+          email: profile.emails?.[0].value,
+        });
+
+        await newUser.save();
+        return done(null, newUser);
       } catch (err) {
         return done(err as Error, false);
       }
@@ -43,7 +57,7 @@ router.get(
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-//  issue a JWT and send to frontend
+// Callback och JWT
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
@@ -54,33 +68,31 @@ router.get(
     const user = req.user as any;
 
     if (!user) {
-      console.log("❌ Ingen användare i callback");
+      console.log("Ingen användare i callback");
       return res.redirect("http://localhost:5173/login");
     }
 
     const payload = {
-      id: user.id,
-      name: user.displayName,
-      email: user.emails?.[0]?.value,
+      id: user._id, // Använd _id från databasen
+      name: user.name, // Använd name från databasen
+      email: user.email, // Använd email från databasen
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET!, {
       expiresIn: "7d",
     });
 
-    // Redirect to frontend with token as query parameter
-    
     console.log("✅ Token skapad:", token);
     res.redirect(`http://localhost:5173/oauth/callback?token=${token}`);
   }
 );
 
-//logout route
+// Logout
 router.get("/auth/logout", (_req: Request, res: Response) => {
   res.sendStatus(200);
 });
 
-// Return current user info
+// Hämta inloggad användare
 router.get("/auth/user", (req: Request, res: Response) => {
   res.json(req.user || null);
 });

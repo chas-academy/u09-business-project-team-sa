@@ -35,6 +35,7 @@ const OauthCallback = () => {
           username: decoded.name,
           email: decoded.email,
         });
+        localStorage.setItem("token", token);
 
         navigate("/home");
       } catch (e) {
