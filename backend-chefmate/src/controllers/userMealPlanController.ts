@@ -89,7 +89,7 @@ export const deepMergeMealPlan = (existingPlan: any = {}, incomingPlan: any = {}
 };
 
 export const saveMealPlan = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-  console.log("✅ saveMealPlan controller hit");  // 
+  console.log(" saveMealPlan controller hit");  // 
   const { plan } = req.body;
   
   try {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './ProfilePage.css';
 import { useAuth } from '../../../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -6,10 +6,8 @@ import '../../../../styles/Buttons.css';
 import FavoritesCard from '../../components/cards/FavoritesCard';
 import WeeklyPlanner from '../../components/cards/WeeklyPlanner';
 import { useMealPlan } from '../../../../context/MealPlanContext';
-import { MealPlan, MealSlot } from '../../../../context/MealPlanContext';
 
-const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const meals = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
+
 
 type Meal = {
   id: string;
@@ -24,7 +22,6 @@ const ProfilePage = () => {
 
   const { mealPlan } = useMealPlan();
 
-  const [username] = useState(() => localStorage.getItem('username') || 'Guest');
   
   const [favoriteMeals, setFavoriteMeals] = useState<Meal[]>([]);
 
