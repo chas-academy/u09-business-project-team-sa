@@ -55,10 +55,7 @@ const HomePage = () => {
           })
         );
 
-        login({
-          username: decoded.name,
-          email: decoded.email,
-        });
+        login({ username: decoded.name, email: decoded.email }, token);
 
         navigate("/home", { replace: true });
       } catch (error) {

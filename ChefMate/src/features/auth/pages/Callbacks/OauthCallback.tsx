@@ -31,11 +31,7 @@ const OauthCallback = () => {
           })
         );
 
-        login({
-          username: decoded.name,
-          email: decoded.email,
-        });
-        localStorage.setItem("token", token);
+        login({ username: decoded.name, email: decoded.email }, token);
 
         navigate("/home");
       } catch (e) {

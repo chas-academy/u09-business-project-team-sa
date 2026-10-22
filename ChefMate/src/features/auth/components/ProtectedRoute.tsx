@@ -15,12 +15,16 @@ const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
         });
 
         const data = await res.json();
-        if (data && data.displayName) {
-          login({
-            username: data.displayName,
-            email: data.emails?.[0]?.value || "",
-          });
-          setIsSessionUser(true); 
+
+        if (data && data.displayName && data.token) {
+          login(
+            {
+              username: data.displayName,
+              email: data.emails?.[0]?.value || "",
+            },
+            data.token
+          );
+          setIsSessionUser(true);
         }
       } catch (err) {
         console.error("Failed to fetch session user:", err);
